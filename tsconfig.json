@@ -1,0 +1,27 @@
+{
+  // Konfigurasi TypeScript Compiler untuk Next.js
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],        // Library yang disertakan
+    "allowJs": true,                                   // Izinkan file JavaScript
+    "skipLibCheck": true,                              // Skip pengecekan tipe library
+    "strict": true,                                    // Enable mode strict TypeScript
+    "noEmit": true,                                    // Tidak emit output (Next.js yang handle)
+    "esModuleInterop": true,                           // Kompatibilitas import ES6 dan CommonJS
+    "module": "esnext",                                // Module system: ESNext
+    "moduleResolution": "bundler",                     // Cara resolve modules: bundler
+    "resolveJsonModule": true,                         // Izinkan import file JSON
+    "isolatedModules": true,                           // Transpile setiap file secara terpisah
+    "jsx": "preserve",                                 // Preserve JSX untuk Next.js compiler
+    "incremental": true,                               // Enable incremental compilation (lebih cepat)
+    "plugins": [
+      {
+        "name": "next"                                 // Plugin TypeScript untuk Next.js
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]                                   // Path alias: @/ mengarah ke root folder
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],  // File yang di-compile
+  "exclude": ["node_modules"]                         // Folder yang diabaikan
+}

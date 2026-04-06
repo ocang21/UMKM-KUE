@@ -1,0 +1,101 @@
+// File schema Prisma untuk mendefinisikan database models
+// Dokumentasi: https://pris.ly/d/prisma-schema
+
+// Generator untuk Prisma Client (library untuk query database)
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Konfigurasi database PostgreSQL
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Ambil URL dari environment variable
+}
+
+// Model User: Akun seller/penjual kue
+model User {
+  id        String   @id @default(cuid())          // ID unik dengan CUID
+  email     String   @unique                       // Email untuk login (unique)
+  password  String                                 // Password ter-hash (bcrypt)
+  name      String                                 // Nama seller
+  role      String   @default("seller")            // Role user (default: seller)
+  createdAt DateTime @default(now())               // Waktu akun dibuat
+  updatedAt DateTime @updatedAt                    // Waktu terakhir diupdate
+
+  // Relasi: User bisa punya banyak kue dan rekening pembayaran
+  cakes           Cake[]
+  paymentAccounts PaymentAccount[]
+}
+
+// Model Cake: Menu kue yang dijual
+model Cake {
+  id          String   @id @default(cuid())        // ID unik kue
+  name        String                               // Nama kue
+  price       Int                                  // Harga kue (dalam Rupiah)
+  imageUrl    String   @db.Text                    // URL gambar (base64, bisa panjang)
+  isAvailable Boolean  @default(true)              // Status ready/tidak ready
+  createdAt   DateTime @default(now())             // Waktu kue ditambahkan
+  updatedAt   DateTime @updatedAt                  // Waktu terakhir diupdate
+
+  // Foreign key ke User (pemilik kue)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relasi: Kue bisa ada di banyak order items
+  orderItems OrderItem[]
+
+  @@index([userId]) // Index untuk query cepat berdasarkan userId
+}
+
+// Model PaymentAccount: Rekening pembayaran seller
+model PaymentAccount {
+  id            String   @id @default(cuid())      // ID unik rekening
+  bankName      String                             // Nama bank (BCA, Mandiri, etc)
+  accountNumber String                             // Nomor rekening
+  accountName   String                             // Nama pemilik rekening
+  createdAt     DateTime @default(now())           // Waktu rekening ditambahkan
+  updatedAt     DateTime @updatedAt                // Waktu terakhir diupdate
+
+  // Foreign key ke User (pemilik rekening)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId]) // Index untuk query cepat berdasarkan userId
+}
+
+// Model Order: Pesanan dari customer
+model Order {
+  id               String   @id @default(cuid())   // ID unik pesanan
+  customerName     String                          // Nama customer
+  whatsappNumber   String                          // Nomor WA customer
+  pickupDate       DateTime                        // Tanggal ambil pesanan
+  pickupTime       String                          // Jam ambil pesanan
+  paymentProofUrl  String   @db.Text               // URL bukti pembayaran (base64)
+  status           String   @default("menunggu")   // Status: menunggu/diproses/selesai
+  createdAt        DateTime @default(now())        // Waktu pesanan dibuat
+  updatedAt        DateTime @updatedAt             // Waktu terakhir diupdate
+
+  // Relasi: Order punya banyak order items
+  orderItems OrderItem[]
+}
+
+// Model OrderItem: Item dalam pesanan (junction table antara Order dan Cake)
+model OrderItem {
+  id       String @id @default(cuid())             // ID unik order item
+  quantity Int                                     // Jumlah kue yang dipesan
+
+  // Foreign key ke Order
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // Foreign key ke Cake (nullable karena kue bisa dihapus)
+  cakeId String?
+  cake   Cake?   @relation(fields: [cakeId], references: [id], onDelete: SetNull)
+
+  // Simpan detail kue saat order dibuat (untuk histori jika kue dihapus)
+  cakeName  String                                 // Nama kue saat order
+  cakePrice Int                                    // Harga kue saat order
+
+  @@index([orderId]) // Index untuk query cepat berdasarkan orderId
+  @@index([cakeId])  // Index untuk query cepat berdasarkan cakeId
+}

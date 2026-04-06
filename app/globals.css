@@ -1,0 +1,90 @@
+/* Import directive Tailwind CSS */
+@tailwind base;        /* Reset & base styles dari Tailwind */
+@tailwind components;  /* Component classes dari Tailwind */
+@tailwind utilities;   /* Utility classes dari Tailwind */
+
+/* CSS Variables untuk tema warna */
+:root {
+  --foreground-rgb: 38, 38, 38;  /* Warna teks utama (dark gray) */
+  --background: #ffffff;          /* Warna background utama (white) */
+}
+
+/* Global styles untuk body */
+body {
+  color: rgb(var(--foreground-rgb));  /* Gunakan warna teks dari variable */
+  background: var(--background);      /* Gunakan warna background dari variable */
+  min-height: 100vh;                  /* Minimal tinggi 100% viewport */
+  overflow-x: hidden;                 /* Sembunyikan horizontal scroll */
+}
+
+/* Tailwind Utilities Layer - Custom utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;  /* Improve text wrapping untuk heading */
+  }
+}
+
+/* Tailwind Components Layer - Reusable component classes */
+@layer components {
+  /* Card dengan style natural/organic */
+  .card-natural {
+    @apply bg-white border border-neutral-200 rounded-natural shadow-sm;
+  }
+  
+  /* Button primary dengan warna brand */
+  .btn-primary {
+    @apply bg-primary-500 text-white px-5 py-2.5 rounded-natural font-medium hover:bg-primary-600 transition-colors;
+  }
+  
+  /* Button outline untuk secondary actions */
+  .btn-outline {
+    @apply bg-white text-neutral-700 px-5 py-2.5 rounded-natural font-medium border border-neutral-300 hover:bg-neutral-50 transition-colors;
+  }
+}
+
+/* Custom scrollbar styling untuk browser berbasis Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;  /* Lebar scrollbar */
+}
+
+/* Track scrollbar (area background) */
+::-webkit-scrollbar-track {
+  background: #f5f5f5;  /* Abu-abu terang */
+}
+
+/* Thumb scrollbar (bagian yang bisa di-drag) */
+::-webkit-scrollbar-thumb {
+  background: #a3a3a3;      /* Abu-abu medium */
+  border-radius: 3px;       /* Sudut rounded */
+}
+
+/* Hover state untuk scrollbar thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: #737373;  /* Abu-abu lebih gelap saat hover */
+}
+
+/* Optimasi untuk perangkat mobile */
+@media (max-width: 640px) {
+  /* Hapus highlight biru saat tap di iOS */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Prevent zoom saat focus input di iOS dengan font-size minimum 16px */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Smooth scrolling untuk anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Font smoothing untuk rendering text yang lebih baik */
+body {
+  -webkit-font-smoothing: antialiased;      /* Untuk Safari/Chrome */
+  -moz-osx-font-smoothing: grayscale;       /* Untuk Firefox di macOS */
+}
