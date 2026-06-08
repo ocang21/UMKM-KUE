@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 // Import Prisma client untuk database
 import { prisma } from "@/lib/prisma";
+import { saveDataUrl } from "@/lib/uploads";
 
 // GET handler (PUBLIC): Mengambil semua kue yang ready/tersedia untuk customer
 export async function GET() {
@@ -16,8 +17,26 @@ export async function GET() {
       }
     });
 
+    const normalizedCakes = await Promise.all(
+      cakes.map(async (cake) => {
+        if (cake.imageUrl?.startsWith("data:image/")) {
+          try {
+            const imageUrl = await saveDataUrl(cake.imageUrl);
+            await prisma.cake.update({
+              where: { id: cake.id },
+              data: { imageUrl },
+            });
+            return { ...cake, imageUrl };
+          } catch (error) {
+            console.error("Normalize available cake image error:", cake.id, error);
+          }
+        }
+        return cake;
+      })
+    );
+
     // Return daftar kue yang ready
-    return NextResponse.json(cakes);
+    return NextResponse.json(normalizedCakes);
   } catch (error) {
     // Log error dan return 500 Internal Server Error
     console.error("Get available cakes error:", error);

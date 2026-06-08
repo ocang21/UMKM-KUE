@@ -3,8 +3,8 @@
 
 // Import hooks React untuk state dan side effects
 import { useState, useEffect } from "react";
-// Import komponen Next.js Image untuk optimasi gambar
-import Image from "next/image";
+// Import komponen SharedImage untuk menampilkan gambar kue
+import SharedImage from "@/components/SharedImage";
 // Import toast untuk notifikasi user
 import toast from "react-hot-toast";
 // Import form modal untuk tambah/edit kue
@@ -133,7 +133,7 @@ export default function CakesPage() {
             <div key={cake.id} className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
               {/* Gambar kue dengan badge status */}
               <div className="relative h-40 sm:h-48">
-                <Image
+                <SharedImage
                   src={cake.imageUrl}
                   alt={cake.name}
                   fill

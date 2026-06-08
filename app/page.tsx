@@ -4,8 +4,7 @@
 
 // Import Link dari Next.js untuk navigasi client-side tanpa reload halaman
 import Link from "next/link";
-// Import Image dari Next.js untuk optimasi gambar otomatis
-import Image from "next/image";
+import SharedImage from "@/components/SharedImage";
 // Import hooks React untuk state management dan side effects
 import { useState, useEffect } from "react";
 
@@ -377,7 +376,7 @@ export default function HomePage() {
                   {/* Gambar kue dengan badge status */}
                   <div className="relative h-48 overflow-hidden bg-neutral-100">
                     {/* Image dengan hover zoom effect */}
-                    <Image
+                    <SharedImage
                       src={cake.imageUrl}
                       alt={cake.name}
                       fill

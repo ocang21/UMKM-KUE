@@ -41,6 +41,27 @@ export async function saveUpload(file: File): Promise<string> {
   return `/uploads/${randomName}`;
 }
 
+const dataUrlRegex = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/;
+
+export async function saveDataUrl(dataUrl: string): Promise<string> {
+  const match = dataUrl.match(dataUrlRegex);
+  if (!match) {
+    throw new Error("Invalid data URL format");
+  }
+
+  const mimeType = match[1];
+  const base64 = match[2];
+  const buffer = Buffer.from(base64, "base64");
+  const extension = getExtension("", mimeType);
+  const randomName = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${extension}`;
+  const targetPath = path.join(uploadDir, randomName);
+
+  await fs.mkdir(uploadDir, { recursive: true });
+  await fs.writeFile(targetPath, buffer);
+
+  return `/uploads/${randomName}`;
+}
+
 export async function deleteUpload(url: string): Promise<void> {
   if (!url || !url.startsWith("/uploads/")) {
     return;

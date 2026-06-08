@@ -6,8 +6,8 @@
 import { useState, useEffect, Suspense } from "react";
 // Import Next.js navigation hooks untuk membaca URL params dan routing
 import { useSearchParams, useRouter } from "next/navigation";
-// Import komponen Image dari Next.js untuk optimasi gambar
-import Image from "next/image";
+// Import komponen SharedImage untuk menampilkan gambar kue
+import SharedImage from "@/components/SharedImage";
 // Import komponen Link dari Next.js untuk navigasi client-side
 import Link from "next/link";
 // Import toast untuk menampilkan notifikasi ke user
@@ -316,7 +316,7 @@ function OrderContent() {
                   >
                     {/* Gambar kue */}
                     <div className="relative w-16 h-16 rounded-natural overflow-hidden flex-shrink-0">
-                      <Image
+                      <SharedImage
                         src={cake.imageUrl}
                         alt={cake.name}
                         fill // Fill parent container
@@ -366,7 +366,7 @@ function OrderContent() {
                       <div key={item.cake.id} className="flex items-center gap-3 p-3 border border-neutral-200 rounded-natural">
                         {/* Gambar kue */}
                         <div className="relative w-16 h-16 rounded-natural overflow-hidden flex-shrink-0">
-                          <Image
+                          <SharedImage
                             src={item.cake.imageUrl}
                             alt={item.cake.name}
                             fill

@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 // Import Prisma client untuk database
 import { prisma } from "@/lib/prisma";
-import { saveUpload } from "@/lib/uploads";
+import { saveUpload, saveDataUrl } from "@/lib/uploads";
 
 // GET handler: Mengambil semua kue milik user yang sedang login
 export async function GET(request: Request) {
@@ -31,8 +31,26 @@ export async function GET(request: Request) {
       }
     });
 
+    const normalizedCakes = await Promise.all(
+      cakes.map(async (cake) => {
+        if (cake.imageUrl?.startsWith("data:image/")) {
+          try {
+            const imageUrl = await saveDataUrl(cake.imageUrl);
+            await prisma.cake.update({
+              where: { id: cake.id },
+              data: { imageUrl },
+            });
+            return { ...cake, imageUrl };
+          } catch (error) {
+            console.error("Normalize cake image error:", cake.id, error);
+          }
+        }
+        return cake;
+      })
+    );
+
     // Return daftar kue sebagai JSON
-    return NextResponse.json(cakes);
+    return NextResponse.json(normalizedCakes);
   } catch (error) {
     // Log error dan return 500 Internal Server Error
     console.error("Get cakes error:", error);
