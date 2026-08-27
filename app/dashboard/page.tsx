@@ -123,7 +123,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link href="/dashboard/cakes">
           <div className="bg-white p-5 rounded-xl border border-cream-300 hover:border-primary-500 hover:shadow-warm-md transition cursor-pointer group">
             <div className="flex items-center gap-3">
@@ -167,6 +167,22 @@ export default async function DashboardPage() {
                   Rekening Toko
                 </h2>
                 <p className="text-[11px] text-neutral-500">Kelola nomor rekening pembayaran</p>
+              </div>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/dashboard/content">
+          <div className="bg-white p-5 rounded-xl border border-cream-300 hover:border-primary-500 hover:shadow-warm-md transition cursor-pointer group">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-cream-100 flex items-center justify-center text-lg">
+                ⚙️
+              </div>
+              <div>
+                <h2 className="text-base font-display font-bold text-primary-900 group-hover:text-primary-700">
+                  Kelola Konten
+                </h2>
+                <p className="text-[11px] text-neutral-500">Edit teks & isi tiap halaman</p>
               </div>
             </div>
           </div>

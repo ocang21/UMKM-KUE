@@ -29,16 +29,23 @@ function normalizeUrl(url: string): string {
 }
 
 export async function saveUpload(file: File): Promise<string> {
-  await fs.mkdir(uploadDir, { recursive: true });
+  try {
+    await fs.mkdir(uploadDir, { recursive: true });
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const extension = getExtension(file.name, file.type);
-  const randomName = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${extension}`;
-  const targetPath = path.join(uploadDir, randomName);
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const extension = getExtension(file.name, file.type);
+    const randomName = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${extension}`;
+    const targetPath = path.join(uploadDir, randomName);
 
-  await fs.writeFile(targetPath, buffer);
+    await fs.writeFile(targetPath, buffer);
 
-  return `/uploads/${randomName}`;
+    return `/uploads/${randomName}`;
+  } catch (fsError) {
+    console.warn("Saving to filesystem fallback to base64:", fsError);
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const mimeType = file.type || "image/jpeg";
+    return `data:${mimeType};base64,${buffer.toString("base64")}`;
+  }
 }
 
 const dataUrlRegex = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/;

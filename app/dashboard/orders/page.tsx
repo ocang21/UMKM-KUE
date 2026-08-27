@@ -182,6 +182,16 @@ export default function OrdersPage() {
                       className="object-cover group-hover:scale-105 transition-transform"
                     />
                   </button>
+                  <a
+                    href={`https://wa.me/${order.whatsappNumber.replace(/^0/, '62')}?text=${encodeURIComponent(
+                      `Halo Kak ${order.customerName}, kami dari Toko Kue UMKM ingin mengonfirmasi pesanan #${order.id.slice(-6).toUpperCase()} dengan status saat ini: [${order.status.toUpperCase()}]. Total: Rp ${calculateTotal(order.orderItems).toLocaleString('id-ID')}. Terima kasih!`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-semibold transition"
+                  >
+                    <span>💬 Hubungi Pembeli</span>
+                  </a>
                 </div>
 
                 {/* Tombol status */}

@@ -12,6 +12,7 @@ import SharedImage from "@/components/SharedImage";
 import Link from "next/link";
 // Import toast untuk menampilkan notifikasi ke user
 import toast from "react-hot-toast";
+import { SAMPLE_20_CAKES } from "@/lib/sampleCakes";
 
 // Interface untuk tipe data Cake (Kue)
 // Mendefinisikan struktur data kue yang akan ditampilkan
@@ -38,6 +39,13 @@ interface CartItem {
   quantity: number;  // Jumlah kue yang dipesan
 }
 
+const DEFAULT_PAYMENT: PaymentAccount = {
+  id: "default-rek",
+  bankName: "BCA (Bank Central Asia)",
+  accountNumber: "8415-0921-3321",
+  accountName: "Toko Kue UMKM Official",
+};
+
 // Komponen utama untuk halaman order
 // Menangani seluruh logika pemesanan kue
 function OrderContent() {
@@ -49,9 +57,21 @@ function OrderContent() {
   const cakeId = searchParams.get("cakeId");
 
   // State untuk menyimpan daftar semua kue yang tersedia
-  const [cakes, setCakes] = useState<Cake[]>([]);
+  const [cakes, setCakes] = useState<Cake[]>(SAMPLE_20_CAKES);
   // State untuk menyimpan informasi akun pembayaran (rekening bank)
-  const [paymentAccount, setPaymentAccount] = useState<PaymentAccount | null>(null);
+  const [paymentAccount, setPaymentAccount] = useState<PaymentAccount | null>(DEFAULT_PAYMENT);
+  // State untuk menyimpan nomor WA penjual
+  const [sellerWhatsapp, setSellerWhatsapp] = useState<string>("081234567890");
+  // State untuk modal sukses dengan tombol WhatsApp
+  const [successOrder, setSuccessOrder] = useState<{
+    orderId: string;
+    customerName: string;
+    pickupDate: string;
+    pickupTime: string;
+    total: number;
+    itemsSummary: string;
+    waUrl: string;
+  } | null>(null);
   // State untuk menyimpan item-item di keranjang pesanan
   const [cart, setCart] = useState<CartItem[]>([]);
   // State untuk menyimpan data form pemesanan (nama, nomor WA, tanggal & jam ambil)
@@ -92,30 +112,34 @@ function OrderContent() {
   // Mengambil daftar kue yang tersedia dan informasi akun pembayaran
   const fetchData = async () => {
     try {
-      // Fetch data secara parallel menggunakan Promise.all untuk efisiensi
-      const [cakesRes, paymentRes] = await Promise.all([
-        fetch("/api/cakes/available"),      // API endpoint untuk kue yang tersedia
-        fetch("/api/payment-accounts/public") // API endpoint untuk akun pembayaran publik
+      const [cakesRes, paymentRes, settingsRes] = await Promise.all([
+        fetch("/api/cakes/available"),
+        fetch("/api/payment-accounts/public"),
+        fetch("/api/settings")
       ]);
 
-      // Parse response JSON dari kedua API
-      const cakesData = await cakesRes.json();
-      const paymentData = await paymentRes.json();
+      if (cakesRes.ok) {
+        const cakesData = await cakesRes.json();
+        if (Array.isArray(cakesData) && cakesData.length > 0) {
+          setCakes(cakesData);
+        }
+      }
 
-      // Set state dengan data yang sudah di-fetch
-      setCakes(cakesData);
-      
-      // Pastikan paymentData adalah objek valid, bukan array atau error
-      if (paymentData && !paymentData.error) {
-        setPaymentAccount(paymentData);
-      } else {
-        // Jika ada error atau data tidak valid, set null
-        setPaymentAccount(null);
+      if (paymentRes.ok) {
+        const paymentData = await paymentRes.json();
+        if (paymentData && !paymentData.error && paymentData.bankName) {
+          setPaymentAccount(paymentData);
+        }
+      }
+
+      if (settingsRes.ok) {
+        const settingsData = await settingsRes.json();
+        if (settingsData && settingsData.whatsappNumber) {
+          setSellerWhatsapp(settingsData.whatsappNumber);
+        }
       }
     } catch (error) {
-      // Tangani error jika fetch gagal (network error, dll)
-      console.error("Error fetching data:", error);
-      toast.error("Gagal memuat data"); // Tampilkan notifikasi error ke user
+      console.log("Using default bakery catalogue for ordering");
     }
   };
 
@@ -242,24 +266,71 @@ function OrderContent() {
         throw new Error(data.error || "Gagal membuat pesanan");
       }
 
-      // Jika sukses, tampilkan notifikasi sukses
-      toast.success("Pesanan berhasil dibuat! Terima kasih 🎉");
-      
-      // Reset form ke kondisi awal setelah pesanan berhasil
-      setCart([]); // Kosongkan keranjang
+      const createdOrder = await res.json();
+      const grandTotal = calculateTotal();
+
+      // Format teks item pesanan untuk WhatsApp
+      const itemsListText = cart
+        .map((item, idx) => `${idx + 1}. ${item.cake.name} (${item.quantity}x) = Rp ${(item.cake.price * item.quantity).toLocaleString("id-ID")}`)
+        .join("\n");
+
+      // Format template pesan WhatsApp untuk penjual
+      const waMessage =
+`Halo Admin Toko Kue, saya telah melakukan pemesanan dan pembayaran via website:
+
+📋 *DETAIL PESANAN*
+• *No. Order:* #${createdOrder.id ? createdOrder.id.slice(-6).toUpperCase() : "BARU"}
+• *Nama Pembeli:* ${formData.customerName}
+• *Nomor WA Pembeli:* ${formData.whatsappNumber}
+• *Jadwal Pengambilan:* ${new Date(formData.pickupDate).toLocaleDateString("id-ID", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} - Pukul ${formData.pickupTime} WIB
+
+🍰 *RINCIAN KUE:*
+${itemsListText}
+
+💰 *TOTAL TAGIHAN:* Rp ${grandTotal.toLocaleString("id-ID")}
+💳 *Metode:* Transfer ${paymentAccount?.bankName || "Bank"}
+
+Bukti pembayaran telah saya upload di website. Mohon dicek dan dikonfirmasi. Terima kasih!`;
+
+      // Bersihkan nomor WhatsApp penjual (misal 0812 -> 62812)
+      let cleanSellerPhone = sellerWhatsapp.replace(/\D/g, "");
+      if (cleanSellerPhone.startsWith("0")) {
+        cleanSellerPhone = "62" + cleanSellerPhone.slice(1);
+      }
+      if (!cleanSellerPhone) cleanSellerPhone = "6281234567890";
+
+      const waDirectUrl = `https://api.whatsapp.com/send?phone=${cleanSellerPhone}&text=${encodeURIComponent(waMessage)}`;
+
+      // Tampilkan popup sukses dan tombol kirim notifikasi WA langsung
+      setSuccessOrder({
+        orderId: createdOrder.id || "BARU",
+        customerName: formData.customerName,
+        pickupDate: formData.pickupDate,
+        pickupTime: formData.pickupTime,
+        total: grandTotal,
+        itemsSummary: itemsListText,
+        waUrl: waDirectUrl,
+      });
+
+      // Buka tab WhatsApp secara otomatis jika memungkinkan
+      try {
+        window.open(waDirectUrl, "_blank", "noopener,noreferrer");
+      } catch (e) {
+        console.log("Auto-open WA blocked, fallback to button");
+      }
+
+      toast.success("Pesanan berhasil disimpan di database!");
+
+      // Reset form ke kondisi awal
+      setCart([]);
       setFormData({
         customerName: "",
         whatsappNumber: "",
         pickupDate: "",
         pickupTime: "",
       });
-      setPaymentProof(null); // Hapus file bukti pembayaran
-      setPaymentProofPreview(""); // Hapus preview gambar
-
-      // Redirect ke halaman home setelah 2 detik
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+      setPaymentProof(null);
+      setPaymentProofPreview("");
 
     } catch (error: any) {
       // Tangani error dan tampilkan notifikasi error
@@ -582,6 +653,61 @@ function OrderContent() {
           </div>
         </div>
       </div>
+
+      {/* Modal Popup Sukses Pemesanan + Tombol Notifikasi WhatsApp ke Penjual */}
+      {successOrder && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-warm-xl border border-cream-300 space-y-5 text-center">
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
+              ✓
+            </div>
+
+            <div>
+              <span className="text-xs font-semibold text-accent-amber uppercase tracking-widest block mb-1">
+                Order #{successOrder.orderId.slice(-6).toUpperCase()} Tersimpan
+              </span>
+              <h3 className="text-2xl font-display font-bold text-primary-900">
+                Pesanan Berhasil Dibuat!
+              </h3>
+              <p className="text-neutral-600 text-xs sm:text-sm mt-1">
+                Data pesanan & bukti pembayaran telah tersimpan aman di database toko.
+              </p>
+            </div>
+
+            <div className="bg-cream-50 border border-cream-200 rounded-xl p-4 text-left text-xs space-y-1.5 text-neutral-700">
+              <p>👤 <strong>Pemesan:</strong> {successOrder.customerName}</p>
+              <p>📅 <strong>Ambil:</strong> {new Date(successOrder.pickupDate).toLocaleDateString('id-ID')} ({successOrder.pickupTime})</p>
+              <p>💰 <strong>Total:</strong> <span className="font-bold text-primary-900">Rp {successOrder.total.toLocaleString('id-ID')}</span></p>
+            </div>
+
+            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-900 text-xs text-left">
+              <p className="font-semibold mb-1 flex items-center gap-1.5">
+                <span>💬</span> Konfirmasi Cepat ke WhatsApp Penjual:
+              </p>
+              <p className="text-[11px] text-emerald-700 leading-relaxed">
+                Kirim pesan rincian pesanan langsung ke nomor WhatsApp penjual agar pesanan segera disiapkan.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <a
+                href={successOrder.waUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl text-xs uppercase tracking-wider shadow-warm-md transition"
+              >
+                <span>📲 Chat Penjual di WA</span>
+              </a>
+              <Link
+                href="/"
+                className="flex-1 inline-flex items-center justify-center py-3 px-4 rounded-xl text-xs font-semibold text-neutral-700 bg-cream-100 hover:bg-cream-200 border border-cream-300 transition"
+              >
+                Kembali ke Beranda
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,8 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 // Import SessionProvider untuk mengelola autentikasi session
 import SessionProvider from "@/components/SessionProvider";
+// Import Gelembung Chat AI Asisten Toko Kue
+import AIChatBubble from "@/components/AIChatBubble";
 
 // Konfigurasi font Inter sebagai font utama untuk body text
 const inter = Inter({ 
@@ -55,6 +57,8 @@ export default function RootLayout({
       <body className={`${inter.variable} ${playfair.variable} font-sans bg-cream-50 text-neutral-800 antialiased selection:bg-accent-gold selection:text-white`}>
         <SessionProvider>
           {children}
+          {/* Gelembung Icon AI Chatbot Asisten Toko Kue */}
+          <AIChatBubble />
           <Toaster 
             position="top-center" 
             toastOptions={{

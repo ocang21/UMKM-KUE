@@ -28,6 +28,7 @@ export default function DashboardNav() {
     { href: "/dashboard/cakes", label: "Menu Kue" },   // Halaman manajemen kue
     { href: "/dashboard/payment", label: "Rekening" }, // Halaman manajemen rekening
     { href: "/dashboard/orders", label: "Pesanan" },   // Halaman daftar pesanan
+    { href: "/dashboard/content", label: "Kelola Konten" }, // Halaman edit teks & konten website
   ];
 
   // Fungsi untuk handle logout

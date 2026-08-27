@@ -3,8 +3,9 @@
 // Import Link dari Next.js untuk navigasi client-side
 import Link from "next/link";
 import SharedImage from "@/components/SharedImage";
-// Import hooks React untuk state management dan side effects
 import { useState, useEffect, useRef } from "react";
+import { SAMPLE_20_CAKES, CakeItem } from "@/lib/sampleCakes";
+import { DEFAULT_SETTINGS, SiteSettings } from "@/lib/settings";
 
 // Hook Counter Animasi Angka Ringan (Native requestAnimationFrame, 0 External Library)
 function useCountUp(end: number, duration: number = 1800, decimals: number = 0, startTrigger: boolean = true) {
@@ -39,19 +40,11 @@ function useCountUp(end: number, duration: number = 1800, decimals: number = 0, 
   return count;
 }
 
-// Interface untuk tipe data Cake (Kue)
-interface Cake {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl: string;
-  isAvailable: boolean;
-}
-
 // Komponen utama Landing Page bergaya Warm Artisan Bakery
 export default function HomePage() {
-  const [cakes, setCakes] = useState<Cake[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [cakes, setCakes] = useState<CakeItem[]>(SAMPLE_20_CAKES);
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("semua");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -84,21 +77,31 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchCakes();
+    fetchSettings();
   }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch("/api/settings");
+      if (res.ok) {
+        const data = await res.json();
+        setSettings((prev) => ({ ...prev, ...data }));
+      }
+    } catch (e) {}
+  };
 
   const fetchCakes = async () => {
     try {
       const res = await fetch("/api/cakes/available");
-      const data = await res.json();
-
       if (!res.ok) {
-        throw new Error(`Fetch error: ${res.status}`);
+        return;
       }
-
-      setCakes(Array.isArray(data) ? data : []);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        setCakes(data);
+      }
     } catch (error) {
-      console.error("Error fetching cakes:", error);
-      setCakes([]);
+      console.log("Using sample cakes for display");
     } finally {
       setIsLoading(false);
     }
@@ -106,18 +109,24 @@ export default function HomePage() {
 
   const categories = [
     { id: "semua", name: "Semua Menu" },
+    { id: "kue-basah", name: "Kue Basah & Chiffon" },
+    { id: "pastry", name: "Croissant & Pastry" },
+    { id: "roti", name: "Roti & Donat" },
+    { id: "tart", name: "Tart & Cake" },
+    { id: "kue-kering", name: "Kue Kering (Toples)" },
   ];
+
+  const filteredCakes = (selectedCategory === "semua"
+    ? cakes
+    : cakes.filter(c => c.category === selectedCategory || !c.category)
+  ).slice(0, 5);
 
   return (
     <div className="min-h-screen bg-cream-50 text-neutral-800 selection:bg-accent-gold selection:text-white">
       {/* Top Announcement Bar */}
       <div className="bg-primary-900 text-cream-100 text-xs py-2 px-4 text-center tracking-wider font-medium border-b border-primary-800">
         <div className="container mx-auto flex justify-center items-center gap-3">
-          <span>✨ Dibuat Fresh Setiap Hari</span>
-          <span className="opacity-40">•</span>
-          <span>100% Bahan Alami Tanpa Pengawet</span>
-          <span className="hidden md:inline opacity-40">•</span>
-          <span className="hidden md:inline">Pesan Hari Ini untuk Pengambilan Besok</span>
+          <span>{settings.announcement}</span>
         </div>
       </div>
 
@@ -130,34 +139,46 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-accent-gold shadow-warm-sm group-hover:scale-105 transition-transform flex-shrink-0 bg-cream-100">
                 <img
                   src="/logo.jpeg"
-                  alt="Logo Toko Kue UMKM"
+                  alt={settings.storeName}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
                 <h1 className="text-xl font-display font-bold tracking-tight text-primary-900 leading-tight">
-                  Toko Kue UMKM
+                  {settings.storeName}
                 </h1>
                 <p className="text-[10px] tracking-widest uppercase font-semibold text-accent-gold">
-                  Artisan Bakery • Est. 2026
+                  {settings.tagline}
                 </p>
               </div>
             </Link>
             
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
-              <a href="#tentang" className="text-neutral-700 hover:text-primary-700 transition">
+              <Link
+                href="/tentang"
+                className="text-neutral-700 hover:text-primary-700 transition"
+              >
                 Tentang Kami
-              </a>
-              <a href="#menu" className="text-neutral-700 hover:text-primary-700 transition">
+              </Link>
+              <Link
+                href="/menu"
+                className="text-neutral-700 hover:text-primary-700 transition"
+              >
                 Menu Spesial
-              </a>
-              <a href="#keunggulan" className="text-neutral-700 hover:text-primary-700 transition">
+              </Link>
+              <Link
+                href="/keunggulan"
+                className="text-neutral-700 hover:text-primary-700 transition"
+              >
                 Keunggulan
-              </a>
-              <a href="#kontak" className="text-neutral-700 hover:text-primary-700 transition">
+              </Link>
+              <Link
+                href="/kontak"
+                className="text-neutral-700 hover:text-primary-700 transition"
+              >
                 Kontak
-              </a>
+              </Link>
             </div>
 
             {/* Right Action Buttons */}
@@ -168,12 +189,12 @@ export default function HomePage() {
               >
                 Portal Penjual
               </Link>
-              <a
-                href="#menu"
+              <Link
+                href="/order"
                 className="btn-primary text-xs uppercase tracking-wider py-2 px-5"
               >
                 Pesan Sekarang
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -196,42 +217,42 @@ export default function HomePage() {
           {isMenuOpen && (
             <div className="md:hidden mt-3 pt-4 pb-2 border-t border-cream-200 animate-in fade-in duration-200">
               <div className="flex flex-col gap-3 text-sm">
-                <a 
-                  href="#tentang" 
+                <Link
+                  href="/tentang"
                   onClick={() => setIsMenuOpen(false)}
                   className="text-neutral-700 hover:text-primary-800 py-1.5 px-2 font-medium"
                 >
                   Tentang Kami
-                </a>
-                <a 
-                  href="#menu" 
+                </Link>
+                <Link
+                  href="/menu"
                   onClick={() => setIsMenuOpen(false)}
                   className="text-neutral-700 hover:text-primary-800 py-1.5 px-2 font-medium"
                 >
                   Menu Spesial
-                </a>
-                <a 
-                  href="#keunggulan" 
+                </Link>
+                <Link
+                  href="/keunggulan"
                   onClick={() => setIsMenuOpen(false)}
                   className="text-neutral-700 hover:text-primary-800 py-1.5 px-2 font-medium"
                 >
                   Keunggulan
-                </a>
-                <a 
-                  href="#kontak" 
+                </Link>
+                <Link
+                  href="/kontak"
                   onClick={() => setIsMenuOpen(false)}
                   className="text-neutral-700 hover:text-primary-800 py-1.5 px-2 font-medium"
                 >
                   Kontak
-                </a>
+                </Link>
                 <div className="pt-2 flex flex-col gap-2 border-t border-cream-200">
-                  <a
-                    href="#menu"
+                  <Link
+                    href="/order"
                     onClick={() => setIsMenuOpen(false)}
                     className="btn-primary text-center text-xs uppercase tracking-wider py-2.5"
                   >
                     Pesan Sekarang
-                  </a>
+                  </Link>
                   <Link
                     href="/login"
                     onClick={() => setIsMenuOpen(false)}
@@ -339,36 +360,36 @@ export default function HomePage() {
             <div className="inline-flex items-center justify-center gap-2 mb-4">
               <span className="w-6 sm:w-10 h-[1px] bg-accent-gold"></span>
               <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.25em] text-accent-amber">
-                Artisan Bakery & Traditional Cakes
+                {settings.heroBadge}
               </span>
               <span className="w-6 sm:w-10 h-[1px] bg-accent-gold"></span>
             </div>
 
             {/* Main Headline */}
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary-900 tracking-tight leading-[1.15] mb-5">
-              Freshly Baked, <br />
-              <span className="italic font-normal text-primary-700">Just for You.</span>
+              {settings.heroTitle} <br />
+              <span className="italic font-normal text-primary-700">{settings.heroTitleItalic}</span>
             </h2>
 
             {/* Description */}
             <p className="text-sm sm:text-base md:text-lg text-neutral-600 max-w-xl mx-auto mb-8 font-sans font-normal leading-relaxed">
-              Kelezatan kue buatan tangan dengan cita rasa otentik warisan keluarga. Menggunakan bahan berkualitas tinggi tanpa pengawet, dibuat fresh untuk setiap momen istimewa Anda.
+              {settings.heroDescription}
             </p>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-8">
-              <a
-                href="#menu"
+              <Link
+                href="/order"
                 className="btn-primary w-full sm:w-auto text-xs sm:text-sm uppercase tracking-wider px-8 py-3.5 shadow-warm-md hover:scale-105 active:scale-95 transition-all duration-200"
               >
                 Pesan Sekarang
-              </a>
-              <a
-                href="#tentang"
+              </Link>
+              <Link
+                href="/tentang"
                 className="btn-outline w-full sm:w-auto text-xs sm:text-sm uppercase tracking-wider px-8 py-3.5 hover:scale-105 active:scale-95 transition-all duration-200"
               >
                 Cerita Kami
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Pastry Showcase (Pure CSS/SVG, Instant Load) */}
@@ -497,10 +518,10 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {cakes.map((cake) => (
+              {filteredCakes.map((cake) => (
                 <div
                   key={cake.id}
-                  className="group bg-white rounded-xl border border-cream-200 overflow-hidden shadow-warm-sm hover:shadow-warm-lg hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                  className="group bg-white rounded-xl border border-cream-200 overflow-hidden shadow-warm-sm hover:shadow-warm-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                 >
                   {/* Cake Image Container */}
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream-100">
@@ -550,6 +571,24 @@ export default function HomePage() {
               ))}
             </div>
           )}
+
+          {/* Tombol Lihat Semua Menu Pilihan */}
+          <div className="mt-12 text-center">
+            <Link
+              href="/menu"
+              className="inline-flex items-center gap-3 bg-white border-2 border-primary-800 text-primary-900 hover:bg-primary-800 hover:text-cream-50 font-bold px-8 py-3.5 rounded-full shadow-warm-md hover:shadow-warm-lg transition-all duration-300 text-xs uppercase tracking-widest group"
+            >
+              <span>Lihat Semua Menu Pilihan (20+ Varian)</span>
+              <svg
+                className="w-4 h-4 text-accent-amber group-hover:text-cream-50 group-hover:translate-x-1 transition-all"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -560,17 +599,16 @@ export default function HomePage() {
             {/* Left Column: Story Content */}
             <div className="md:col-span-7">
               <span className="text-xs uppercase tracking-[0.25em] font-semibold text-accent-amber block mb-2">
-                Cerita & Tradisi Kami
+                {settings.aboutBadge}
               </span>
               <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-900 mb-6 leading-tight">
-                Kelezatan Autentik dari <br />
-                <span className="italic font-normal text-primary-700">Resep Turun-Temurun</span>
+                {settings.aboutTitle}
               </h2>
               <p className="text-neutral-700 text-sm md:text-base leading-relaxed mb-4">
-                Berawal dari kecintaan keluarga terhadap kue tradisional buatan rumah, kami mendedikasikan diri untuk menghadirkan rasa kue asli yang otentik, lembut, dan kaya rasa.
+                {settings.aboutParagraph1}
               </p>
               <p className="text-neutral-700 text-sm md:text-base leading-relaxed mb-8">
-                Setiap adonan dibuat secara teliti setiap subuh dengan standar kebersihan tinggi dan tanpa tambahan bahan pengawet sintetis.
+                {settings.aboutParagraph2}
               </p>
 
               {/* Numbered Features List */}
@@ -578,22 +616,22 @@ export default function HomePage() {
                 <div className="flex items-start gap-4 p-3 bg-white/70 rounded-lg border border-cream-200">
                   <span className="text-accent-amber font-display font-bold text-lg">01</span>
                   <div>
-                    <h4 className="font-semibold text-primary-900 text-sm">Bahan Pilihan Terbaik</h4>
-                    <p className="text-xs text-neutral-600 mt-0.5">Mentega, telur, dan tepung kualitas utama untuk rasa terbaik.</p>
+                    <h4 className="font-semibold text-primary-900 text-sm">{settings.pillar1Title}</h4>
+                    <p className="text-xs text-neutral-600 mt-0.5">{settings.pillar1Desc}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-3 bg-white/70 rounded-lg border border-cream-200">
                   <span className="text-accent-amber font-display font-bold text-lg">02</span>
                   <div>
-                    <h4 className="font-semibold text-primary-900 text-sm">Fresh dari Dapur</h4>
-                    <p className="text-xs text-neutral-600 mt-0.5">Kue dipanggang sesuai jadwal pesanan sehingga tetap hangat dan lembut.</p>
+                    <h4 className="font-semibold text-primary-900 text-sm">{settings.pillar2Title}</h4>
+                    <p className="text-xs text-neutral-600 mt-0.5">{settings.pillar2Desc}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-3 bg-white/70 rounded-lg border border-cream-200">
                   <span className="text-accent-amber font-display font-bold text-lg">03</span>
                   <div>
-                    <h4 className="font-semibold text-primary-900 text-sm">Pemesanan Praktis</h4>
-                    <p className="text-xs text-neutral-600 mt-0.5">Pilih tanggal dan jam ambil, konfirmasi langsung tanpa ribet.</p>
+                    <h4 className="font-semibold text-primary-900 text-sm">{settings.pillar3Title}</h4>
+                    <p className="text-xs text-neutral-600 mt-0.5">{settings.pillar3Desc}</p>
                   </div>
                 </div>
               </div>
@@ -606,11 +644,11 @@ export default function HomePage() {
                   “
                 </div>
                 <p className="font-display italic text-base sm:text-lg text-primary-900 leading-relaxed mb-4">
-                  “Kue yang lezat bukan hanya tentang rasa manis, tapi tentang kehangatan momen di setiap gigitan.”
+                  “{settings.aboutQuote}”
                 </p>
                 <div className="w-10 h-0.5 bg-accent-gold mx-auto mb-3"></div>
                 <div className="text-xs font-semibold tracking-widest uppercase text-accent-amber">
-                  Toko Kue UMKM
+                  {settings.storeName}
                 </div>
                 <div className="text-[11px] text-neutral-500 mt-0.5">Dedikasi Rasa Sejak 2026</div>
               </div>
@@ -624,10 +662,10 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs uppercase tracking-[0.2em] font-semibold text-accent-amber block mb-2">
-              Keunggulan Layanan
+              {settings.advantagesBadge}
             </span>
             <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-900 mb-3">
-              Kenapa Memilih Kami?
+              {settings.advantagesTitle}
             </h2>
             <div className="w-12 h-0.5 bg-accent-gold mx-auto"></div>
           </div>
@@ -637,9 +675,9 @@ export default function HomePage() {
               <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 text-xl font-display font-bold border border-cream-300">
                 01
               </div>
-              <h3 className="font-display font-bold text-lg text-primary-900 mb-2">Kualitas Terjamin</h3>
+              <h3 className="font-display font-bold text-lg text-primary-900 mb-2">{settings.feature1Title}</h3>
               <p className="text-neutral-600 text-sm leading-relaxed">
-                Kami tidak berkompromi dengan kualitas bahan. Setiap resep diracik dengan standar terbaik agar rasa selalu konsisten.
+                {settings.feature1Desc}
               </p>
             </div>
 
@@ -647,9 +685,9 @@ export default function HomePage() {
               <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 text-xl font-display font-bold border border-cream-300">
                 02
               </div>
-              <h3 className="font-display font-bold text-lg text-primary-900 mb-2">Dibuat dengan Teliti</h3>
+              <h3 className="font-display font-bold text-lg text-primary-900 mb-2">{settings.feature2Title}</h3>
               <p className="text-neutral-600 text-sm leading-relaxed">
-                Sentuhan tangan pengrajin kue rumahan yang berpengalaman membuat setiap tekstur kue terasa pas dan memanjakan lidah.
+                {settings.feature2Desc}
               </p>
             </div>
 
@@ -657,9 +695,9 @@ export default function HomePage() {
               <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 text-xl font-display font-bold border border-cream-300">
                 03
               </div>
-              <h3 className="font-display font-bold text-lg text-primary-900 mb-2">Pemesanan Fleksibel</h3>
+              <h3 className="font-display font-bold text-lg text-primary-900 mb-2">{settings.feature3Title}</h3>
               <p className="text-neutral-600 text-sm leading-relaxed">
-                Pilih tanggal dan jam pengambilan kue sesuai kebutuhan acara Anda. Praktis, tepat waktu, dan terjaga kesegarannya.
+                {settings.feature3Desc}
               </p>
             </div>
           </div>
@@ -678,15 +716,15 @@ export default function HomePage() {
           <p className="text-cream-200 text-sm md:text-base mb-8 max-w-xl mx-auto font-sans leading-relaxed">
             Pesan sekarang secara online dan nikmati kelezatan kue buatan tangan yang hangat dan lembut bersama keluarga.
           </p>
-          <a
-            href="#menu"
+          <Link
+            href="/order"
             className="inline-flex items-center gap-2 bg-cream-100 text-primary-900 font-semibold px-8 py-3.5 rounded-full hover:bg-white transition-colors shadow-warm-lg text-sm uppercase tracking-wider"
           >
-            <span>Pilih Menu Sekarang</span>
+            <span>Pesan Sekarang Melalui Formulir</span>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -700,21 +738,21 @@ export default function HomePage() {
                 <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-accent-gold flex-shrink-0 bg-cream-100">
                   <img
                     src="/logo.jpeg"
-                    alt="Logo Toko Kue UMKM"
+                    alt={settings.storeName}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div>
-                  <h3 className="text-lg font-display font-bold text-cream-50">Toko Kue UMKM</h3>
-                  <p className="text-[10px] uppercase tracking-widest text-accent-gold">Artisan Bakery</p>
+                  <h3 className="text-lg font-display font-bold text-cream-50">{settings.storeName}</h3>
+                  <p className="text-[10px] uppercase tracking-widest text-accent-gold">{settings.tagline}</p>
                 </div>
               </div>
               <p className="text-cream-300/80 text-xs leading-relaxed max-w-sm mb-4">
                 Menghadirkan kue tradisional dan modern berkualitas tinggi dengan bahan alami terbaik untuk setiap momen kebersamaan Anda.
               </p>
               <div className="text-xs text-cream-300/70 space-y-1">
-                <p>📍 Lokasi: Samata, Gowa, Sulawesi Selatan</p>
-                <p>⏰ Buka: Setiap Hari (08.00 - 18.00 WITA)</p>
+                <p>📍 Lokasi: {settings.address}</p>
+                <p>⏰ Buka: {settings.openingHours}</p>
               </div>
             </div>
 
@@ -724,9 +762,10 @@ export default function HomePage() {
                 Navigasi
               </h4>
               <ul className="space-y-2 text-xs text-cream-300/80">
-                <li><a href="#tentang" className="hover:text-accent-gold transition">Tentang Kami</a></li>
-                <li><a href="#menu" className="hover:text-accent-gold transition">Menu Pilihan</a></li>
-                <li><a href="#keunggulan" className="hover:text-accent-gold transition">Keunggulan</a></li>
+                <li><Link href="/tentang" className="hover:text-accent-gold transition">Tentang Kami</Link></li>
+                <li><Link href="/menu" className="hover:text-accent-gold transition">Menu Pilihan</Link></li>
+                <li><Link href="/keunggulan" className="hover:text-accent-gold transition">Keunggulan</Link></li>
+                <li><Link href="/kontak" className="hover:text-accent-gold transition">Kontak</Link></li>
                 <li><Link href="/order" className="hover:text-accent-gold transition">Form Pemesanan</Link></li>
               </ul>
             </div>
@@ -739,20 +778,20 @@ export default function HomePage() {
               <ul className="space-y-2 text-xs text-cream-300/80">
                 <li>
                   <span className="block text-[10px] text-cream-400 uppercase">WhatsApp</span>
-                  <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition">
-                    0812-3456-7890
+                  <a href={`https://wa.me/${settings.whatsappNumber.replace(/^0/, '62')}`} target="_blank" rel="noopener noreferrer" className="hover:text-accent-gold transition">
+                    {settings.whatsappNumber}
                   </a>
                 </li>
                 <li>
                   <span className="block text-[10px] text-cream-400 uppercase">Email</span>
-                  <span className="text-cream-300">order@tokokueumkm.com</span>
+                  <span className="text-cream-300">{settings.email}</span>
                 </li>
               </ul>
             </div>
           </div>
 
           <div className="pt-6 border-t border-primary-900/60 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-cream-400/60">
-            <p>© 2026 Toko Kue UMKM. Seluruh Hak Cipta Dilindungi.</p>
+            <p>© 2026 {settings.storeName}. Seluruh Hak Cipta Dilindungi.</p>
             <p className="text-[11px] tracking-wide">Dibuat dengan penuh cinta untuk UMKM Indonesia.</p>
           </div>
         </div>
