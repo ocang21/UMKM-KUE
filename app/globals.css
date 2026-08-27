@@ -3,74 +3,99 @@
 @tailwind components;  /* Component classes dari Tailwind */
 @tailwind utilities;   /* Utility classes dari Tailwind */
 
-/* CSS Variables untuk tema warna */
+/* CSS Variables untuk tema warna Warm Bakery */
 :root {
-  --foreground-rgb: 38, 38, 38;  /* Warna teks utama (dark gray) */
-  --background: #ffffff;          /* Warna background utama (white) */
+  --foreground-rgb: 38, 23, 14;      /* Warna teks utama (Deep Cocoa #26170E) */
+  --background: #FDFBF7;              /* Warna background utama (Linen Cream) */
 }
 
 /* Global styles untuk body */
 body {
-  color: rgb(var(--foreground-rgb));  /* Gunakan warna teks dari variable */
-  background: var(--background);      /* Gunakan warna background dari variable */
-  min-height: 100vh;                  /* Minimal tinggi 100% viewport */
-  overflow-x: hidden;                 /* Sembunyikan horizontal scroll */
+  color: rgb(var(--foreground-rgb));
+  background-color: var(--background);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Tailwind Utilities Layer - Custom utility classes */
 @layer utilities {
   .text-balance {
-    text-wrap: balance;  /* Improve text wrapping untuk heading */
+    text-wrap: balance;
+  }
+  
+  /* CSS Dot Pattern untuk background bertekstur lembut tanpa gambar */
+  .bg-artisan-dots {
+    background-image: radial-gradient(rgba(111, 71, 43, 0.12) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Grid halus untuk aksen editorial */
+  .bg-grid-warm {
+    background-image: linear-gradient(to right, rgba(111, 71, 43, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(111, 71, 43, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 }
 
 /* Tailwind Components Layer - Reusable component classes */
 @layer components {
-  /* Card dengan style natural/organic */
+  /* Card dengan style artisan natural */
   .card-natural {
-    @apply bg-white border border-neutral-200 rounded-natural shadow-sm;
+    @apply bg-white border border-cream-200 rounded-natural shadow-warm-sm hover:shadow-warm-md transition-all duration-300;
+  }
+
+  .card-artisan {
+    @apply bg-white border border-cream-300 rounded-natural shadow-warm-md hover:shadow-warm-lg hover:-translate-y-1 transition-all duration-300;
   }
   
-  /* Button primary dengan warna brand */
+  /* Button primary dengan warna Rich Cocoa dan rounded pill seperti referensi */
   .btn-primary {
-    @apply bg-primary-500 text-white px-5 py-2.5 rounded-natural font-medium hover:bg-primary-600 transition-colors;
+    @apply bg-primary-700 text-cream-50 px-6 py-2.5 rounded-full font-medium tracking-wide hover:bg-primary-800 active:bg-primary-900 shadow-warm-sm hover:shadow-warm-md transition-all duration-200 inline-flex items-center justify-center;
   }
   
-  /* Button outline untuk secondary actions */
+  /* Button outline dengan border coklat hangat */
   .btn-outline {
-    @apply bg-white text-neutral-700 px-5 py-2.5 rounded-natural font-medium border border-neutral-300 hover:bg-neutral-50 transition-colors;
+    @apply bg-transparent text-primary-800 px-6 py-2.5 rounded-full font-medium border border-primary-400 hover:bg-cream-100 hover:border-primary-600 active:bg-cream-200 transition-all duration-200 inline-flex items-center justify-center;
+  }
+
+  /* Badge stempel gaya artisan */
+  .badge-artisan {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-cream-100 text-primary-800 border border-cream-300;
+  }
+
+  /* Double border frame vintage untuk hero/section highlight */
+  .vintage-frame {
+    @apply relative p-6 md:p-10 bg-white border border-primary-200 shadow-warm-lg;
+    outline: 1px solid rgba(200, 159, 110, 0.4);
+    outline-offset: -8px;
   }
 }
 
-/* Custom scrollbar styling untuk browser berbasis Webkit (Chrome, Safari, Edge) */
+/* Custom scrollbar styling dengan warna warm cocoa */
 ::-webkit-scrollbar {
-  width: 10px;  /* Lebar scrollbar */
+  width: 9px;
 }
 
-/* Track scrollbar (area background) */
 ::-webkit-scrollbar-track {
-  background: #f5f5f5;  /* Abu-abu terang */
+  background: #FAF5EC;
 }
 
-/* Thumb scrollbar (bagian yang bisa di-drag) */
 ::-webkit-scrollbar-thumb {
-  background: #a3a3a3;      /* Abu-abu medium */
-  border-radius: 3px;       /* Sudut rounded */
+  background: #D5BC9F;
+  border-radius: 4px;
+  border: 2px solid #FAF5EC;
 }
 
-/* Hover state untuk scrollbar thumb */
 ::-webkit-scrollbar-thumb:hover {
-  background: #737373;  /* Abu-abu lebih gelap saat hover */
+  background: #B89773;
 }
 
 /* Optimasi untuk perangkat mobile */
 @media (max-width: 640px) {
-  /* Hapus highlight biru saat tap di iOS */
   * {
     -webkit-tap-highlight-color: transparent;
   }
   
-  /* Prevent zoom saat focus input di iOS dengan font-size minimum 16px */
   input,
   textarea,
   select {
@@ -78,13 +103,193 @@ body {
   }
 }
 
-/* Smooth scrolling untuk anchor links */
 html {
   scroll-behavior: smooth;
 }
 
-/* Font smoothing untuk rendering text yang lebih baik */
 body {
-  -webkit-font-smoothing: antialiased;      /* Untuk Safari/Chrome */
-  -moz-osx-font-smoothing: grayscale;       /* Untuk Firefox di macOS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Keyframe Animasi Melayang Alami, Halus & Fleksibel (Multi-Axis Floating) */
+@keyframes floatGentle1 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-6deg);
+  }
+  25% {
+    transform: translate3d(4px, -12px, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate3d(0, -22px, 0) rotate(-2deg);
+  }
+  75% {
+    transform: translate3d(-4px, -10px, 0) rotate(-4deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-6deg);
+  }
+}
+
+@keyframes floatGentle2 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(6deg);
+  }
+  25% {
+    transform: translate3d(-5px, -14px, 0) rotate(4deg);
+  }
+  50% {
+    transform: translate3d(0, -24px, 0) rotate(1deg);
+  }
+  75% {
+    transform: translate3d(4px, -12px, 0) rotate(3deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(6deg);
+  }
+}
+
+@keyframes floatGentle3 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(4deg);
+  }
+  25% {
+    transform: translate3d(5px, -10px, 0) rotate(2deg);
+  }
+  50% {
+    transform: translate3d(0, -20px, 0) rotate(-1deg);
+  }
+  75% {
+    transform: translate3d(-3px, -8px, 0) rotate(1deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(4deg);
+  }
+}
+
+@keyframes floatGentle4 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-6deg);
+  }
+  25% {
+    transform: translate3d(-4px, -12px, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate3d(0, -22px, 0) rotate(-1deg);
+  }
+  75% {
+    transform: translate3d(5px, -9px, 0) rotate(-3deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-6deg);
+  }
+}
+
+@keyframes softSteam {
+  0% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-8px) scaleX(1.3);
+    opacity: 0;
+  }
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utilities Class untuk Animasi Melayang Otomatis & Fleksibel */
+.animate-float-card-1 {
+  animation: floatGentle1 6.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+  will-change: transform;
+}
+
+.animate-float-card-2 {
+  animation: floatGentle2 7.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.6s !important;
+  will-change: transform;
+}
+
+.animate-float-card-3 {
+  animation: floatGentle3 7.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 1.2s !important;
+  will-change: transform;
+}
+
+.animate-float-card-4 {
+  animation: floatGentle4 6.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.3s !important;
+  will-change: transform;
+}
+
+.animate-steam {
+  animation: softSteam 2.5s ease-out infinite;
+}
+
+.animate-gentle-pulse {
+  animation: gentlePulse 3.5s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Dukungan prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .animate-float-card-1,
+  .animate-float-card-2,
+  .animate-float-card-3,
+  .animate-float-card-4,
+  .animate-steam,
+  .animate-gentle-pulse,
+  .animate-fade-in-up {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.animate-gentle-pulse {
+  animation: gentlePulse 3.5s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Dukungan prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .animate-float-card-1,
+  .animate-float-card-2,
+  .animate-float-card-3,
+  .animate-float-card-4,
+  .animate-steam,
+  .animate-gentle-pulse,
+  .animate-fade-in-up {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -99,15 +99,18 @@ export default function CakesPage() {
 
   // Render halaman daftar kue
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-4">
+    <div className="max-w-7xl mx-auto space-y-6">
       {/* Header dengan judul dan tombol tambah */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-800">Menu Kue</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-cream-300">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-primary-900">Katalog Menu Kue</h1>
+          <p className="text-neutral-600 text-xs sm:text-sm mt-0.5">Kelola daftar varian kue yang tampil pada etalase toko.</p>
+        </div>
         <button
           onClick={() => setShowForm(true)}
-          className="w-full sm:w-auto bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition shadow-lg text-sm sm:text-base"
+          className="btn-primary text-xs uppercase tracking-wider py-2.5 px-5 shadow-warm-sm"
         >
-          + Tambah Kue
+          + Tambah Menu Baru
         </button>
       </div>
 
@@ -121,56 +124,64 @@ export default function CakesPage() {
 
       {/* Tampilkan empty state jika belum ada kue */}
       {cakes.length === 0 ? (
-        <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-8 sm:p-12 text-center">
-          <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">🍰</div>
-          <p className="text-gray-600 text-base sm:text-lg">Belum ada menu kue. Tambahkan menu pertama Anda!</p>
+        <div className="bg-white rounded-xl border border-cream-300 shadow-warm-sm p-10 text-center max-w-md mx-auto">
+          <div className="text-4xl mb-3">🍰</div>
+          <h3 className="text-base font-display font-bold text-primary-900 mb-1">Belum Ada Menu</h3>
+          <p className="text-neutral-500 text-xs mb-4">Tambahkan menu pertama Anda agar pelanggan bisa memesan.</p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="btn-primary text-xs uppercase tracking-wider py-2 px-4"
+          >
+            Tambah Menu Sekarang
+          </button>
         </div>
       ) : (
         // Grid layout untuk daftar kue (responsive)
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {cakes.map((cake) => (
-            // Card untuk setiap kue
-            <div key={cake.id} className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
-              {/* Gambar kue dengan badge status */}
-              <div className="relative h-40 sm:h-48">
-                <SharedImage
-                  src={cake.imageUrl}
-                  alt={cake.name}
-                  fill
-                  className="object-cover"
-                />
-                {/* Badge showing availability status */}
-                <div className="absolute top-2 right-2">
-                  <span className={`px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
-                    cake.isAvailable 
-                      ? "bg-green-500 text-white" 
-                      : "bg-red-500 text-white"
-                  }`}>
-                    {cake.isAvailable ? "Ready" : "Tidak Ready"}
-                  </span>
+            <div key={cake.id} className="bg-white rounded-xl border border-cream-300 shadow-warm-sm overflow-hidden flex flex-col justify-between hover:shadow-warm-md transition">
+              <div>
+                {/* Gambar kue dengan badge status */}
+                <div className="relative aspect-[4/3] w-full bg-cream-100">
+                  <SharedImage
+                    src={cake.imageUrl}
+                    alt={cake.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute top-2.5 right-2.5">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase ${
+                      cake.isAvailable 
+                        ? "bg-green-100 text-green-800 border border-green-200" 
+                        : "bg-red-100 text-red-800 border border-red-200"
+                    }`}>
+                      {cake.isAvailable ? "Ready" : "Tidak Ready"}
+                    </span>
+                  </div>
+                </div>
+                {/* Info kue */}
+                <div className="p-4">
+                  <h3 className="font-display font-semibold text-base text-primary-900 truncate">{cake.name}</h3>
+                  <p className="text-primary-700 font-bold text-base mt-0.5 font-sans">
+                    Rp {cake.price.toLocaleString("id-ID")}
+                  </p>
                 </div>
               </div>
-              {/* Info kue: nama, harga, tombol aksi */}
-              <div className="p-3 sm:p-4">
-                <h3 className="font-display font-bold text-base sm:text-lg mb-1.5 sm:mb-2 truncate">{cake.name}</h3>
-                <p className="text-primary-600 font-bold text-lg sm:text-xl mb-3 sm:mb-4">
-                  Rp {cake.price.toLocaleString("id-ID")}
-                </p>
-                {/* Tombol Edit dan Hapus */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(cake)}
-                    className="flex-1 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold py-2 rounded-lg transition text-sm sm:text-base"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(cake.id)}
-                    className="flex-1 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold py-2 rounded-lg transition text-sm sm:text-base"
-                  >
-                    Hapus
-                  </button>
-                </div>
+
+              {/* Tombol Edit dan Hapus */}
+              <div className="p-4 pt-0 flex gap-2 border-t border-cream-100 mt-2">
+                <button
+                  onClick={() => handleEdit(cake)}
+                  className="flex-1 py-1.5 px-3 bg-cream-100 hover:bg-cream-200 text-primary-900 font-semibold rounded-lg transition text-xs uppercase tracking-wider"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(cake.id)}
+                  className="flex-1 py-1.5 px-3 bg-red-50 hover:bg-red-100 text-red-700 font-semibold rounded-lg transition text-xs uppercase tracking-wider"
+                >
+                  Hapus
+                </button>
               </div>
             </div>
           ))}

@@ -90,13 +90,16 @@ export default function PaymentPage() {
 
   // Render halaman daftar rekening pembayaran
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4">
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Header dengan judul dan tombol tambah */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-800">Rekening Pembayaran</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-cream-300">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-primary-900">Rekening Pembayaran</h1>
+          <p className="text-neutral-600 text-xs sm:text-sm mt-0.5">Atur nomor rekening tujuan transfer yang akan dilihat oleh pembeli.</p>
+        </div>
         <button
           onClick={() => setShowForm(true)}
-          className="w-full sm:w-auto bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition shadow-lg text-sm sm:text-base"
+          className="btn-primary text-xs uppercase tracking-wider py-2.5 px-5 shadow-warm-sm"
         >
           + Tambah Rekening
         </button>
@@ -112,51 +115,52 @@ export default function PaymentPage() {
 
       {/* Tampilkan empty state jika belum ada rekening */}
       {accounts.length === 0 ? (
-        <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-8 sm:p-12 text-center">
-          <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">💳</div>
-          <p className="text-gray-600 text-base sm:text-lg">Belum ada rekening. Tambahkan rekening pembayaran Anda!</p>
+        <div className="bg-white rounded-xl border border-cream-300 shadow-warm-sm p-12 text-center max-w-md mx-auto">
+          <div className="text-4xl mb-3">💳</div>
+          <h3 className="text-base font-display font-bold text-primary-900 mb-1">Belum Ada Rekening</h3>
+          <p className="text-neutral-500 text-xs mb-4">Tambahkan rekening bank agar pembeli dapat melakukan pembayaran via transfer.</p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="btn-primary text-xs uppercase tracking-wider py-2 px-4"
+          >
+            Tambah Rekening Sekarang
+          </button>
         </div>
       ) : (
-        // List rekening dengan vertical spacing
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-4">
           {accounts.map((account) => (
-            // Card untuk setiap rekening
-            <div key={account.id} className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 hover:shadow-xl transition">
-              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0">
-                {/* Info rekening */}
-                <div className="flex-1 w-full">
-                  {/* Nama bank */}
-                  <h3 className="font-display font-bold text-lg sm:text-xl mb-2 sm:mb-3 text-gray-800">
-                    {account.bankName}
-                  </h3>
-                  <div className="space-y-1.5 sm:space-y-2 text-gray-600 text-sm sm:text-base">
-                    {/* Nomor rekening */}
-                    <p>
-                      <span className="font-semibold">Nomor Rekening:</span>{" "}
-                      <span className="text-base sm:text-lg font-mono break-all">{account.accountNumber}</span>
-                    </p>
-                    {/* Nama pemilik rekening */}
-                    <p>
-                      <span className="font-semibold">Atas Nama:</span>{" "}
-                      <span className="text-base sm:text-lg">{account.accountName}</span>
-                    </p>
-                  </div>
+            <div key={account.id} className="vintage-frame bg-white rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex-1">
+                <span className="text-[10px] font-semibold tracking-widest uppercase text-accent-amber block mb-1">
+                  Rekening Aktif
+                </span>
+                <h3 className="font-display font-bold text-xl text-primary-900 mb-2">
+                  {account.bankName}
+                </h3>
+                <div className="space-y-1 text-xs sm:text-sm text-neutral-700">
+                  <p>
+                    <span className="text-neutral-500">Nomor Rekening:</span>{" "}
+                    <span className="font-mono text-base font-bold text-primary-800 tracking-wider break-all">{account.accountNumber}</span>
+                  </p>
+                  <p>
+                    <span className="text-neutral-500">Atas Nama:</span>{" "}
+                    <span className="font-semibold text-neutral-900">{account.accountName}</span>
+                  </p>
                 </div>
-                {/* Tombol Edit dan Hapus */}
-                <div className="flex gap-2 w-full sm:w-auto">
-                  <button
-                    onClick={() => handleEdit(account)}
-                    className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold rounded-lg transition text-sm sm:text-base"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(account.id)}
-                    className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-lg transition text-sm sm:text-base"
-                  >
-                    Hapus
-                  </button>
-                </div>
+              </div>
+              <div className="flex gap-2 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-0 border-cream-200">
+                <button
+                  onClick={() => handleEdit(account)}
+                  className="flex-1 sm:flex-none px-4 py-2 bg-cream-100 hover:bg-cream-200 text-primary-900 font-semibold rounded-lg transition text-xs uppercase tracking-wider"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(account.id)}
+                  className="flex-1 sm:flex-none px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 font-semibold rounded-lg transition text-xs uppercase tracking-wider"
+                >
+                  Hapus
+                </button>
               </div>
             </div>
           ))}

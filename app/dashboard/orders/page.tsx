@@ -105,116 +105,109 @@ export default function OrdersPage() {
 
   // Render halaman daftar pesanan
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-4">
+    <div className="max-w-7xl mx-auto space-y-6">
       {/* Judul halaman */}
-      <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-800 mb-6 sm:mb-8">Daftar Pesanan</h1>
+      <div className="pb-4 border-b border-cream-300">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-primary-900">Daftar Pesanan Masuk</h1>
+        <p className="text-neutral-600 text-xs sm:text-sm mt-0.5">Pantau status konfirmasi pesanan dan bukti pembayaran pelanggan.</p>
+      </div>
 
       {/* Tampilkan empty state jika belum ada pesanan */}
       {orders.length === 0 ? (
-        <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-8 sm:p-12 text-center">
-          <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">📦</div>
-          <p className="text-gray-600 text-base sm:text-lg">Belum ada pesanan masuk</p>
+        <div className="bg-white rounded-xl border border-cream-300 shadow-warm-sm p-12 text-center max-w-md mx-auto">
+          <div className="text-4xl mb-3">📦</div>
+          <h3 className="text-base font-display font-bold text-primary-900 mb-1">Belum Ada Pesanan</h3>
+          <p className="text-neutral-500 text-xs">Pesanan dari pembeli akan otomatis muncul di sini.</p>
         </div>
       ) : (
-        // List pesanan dengan vertical spacing
-        <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-4">
           {orders.map((order) => (
-            // Card untuk setiap pesanan
-            <div key={order.id} className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden">
-              <div className="p-4 sm:p-6">
-                {/* Header: Info customer dan status badge */}
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0 mb-4">
-                  <div className="flex-1">
-                    {/* Nama customer */}
-                    <h3 className="font-display font-bold text-lg sm:text-xl mb-2">{order.customerName}</h3>
-                    {/* WhatsApp dengan link ke WA */}
-                    <p className="text-gray-600 text-sm sm:text-base">
-                      📱 WhatsApp: <a href={`https://wa.me/${order.whatsappNumber.replace(/^0/, '62')}`} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline break-all">{order.whatsappNumber}</a>
+            <div key={order.id} className="bg-white rounded-xl border border-cream-300 shadow-warm-sm overflow-hidden p-5 sm:p-6">
+              {/* Header: Info customer dan status badge */}
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 pb-4 border-b border-cream-200">
+                <div>
+                  <h3 className="font-display font-bold text-lg text-primary-900">{order.customerName}</h3>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-600 mt-1">
+                    <p>
+                      📱 WA: <a href={`https://wa.me/${order.whatsappNumber.replace(/^0/, '62')}`} target="_blank" rel="noopener noreferrer" className="text-primary-700 font-semibold hover:underline">{order.whatsappNumber}</a>
                     </p>
-                    {/* Tanggal dan waktu pickup */}
-                    <p className="text-gray-600 text-sm sm:text-base">
-                      📅 Ambil: {new Date(order.pickupDate).toLocaleDateString('id-ID')} jam {order.pickupTime}
-                    </p>
-                    {/* Tanggal pesanan dibuat */}
-                    <p className="text-gray-500 text-xs sm:text-sm mt-1">
-                      Dipesan: {new Date(order.createdAt).toLocaleString('id-ID')}
+                    <p>
+                      📅 Pengambilan: <span className="font-semibold text-neutral-800">{new Date(order.pickupDate).toLocaleDateString('id-ID')} ({order.pickupTime})</span>
                     </p>
                   </div>
-                  {/* Badge status pesanan */}
-                  <div className="w-full sm:w-auto">
-                    <span className={`inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-white font-semibold text-sm ${getStatusColor(order.status)}`}>
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                    </span>
+                  <p className="text-[11px] text-neutral-400 mt-1">
+                    Dibuat: {new Date(order.createdAt).toLocaleString('id-ID')}
+                  </p>
+                </div>
+                
+                {/* Badge status pesanan */}
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase ${
+                  order.status === 'menunggu' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                  order.status === 'diproses' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                  'bg-green-100 text-green-800 border border-green-200'
+                }`}>
+                  {order.status}
+                </span>
+              </div>
+
+              {/* Section detail pesanan */}
+              <div className="py-4 border-b border-cream-200">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Item Pesanan:</h4>
+                <div className="space-y-1.5">
+                  {order.orderItems.map((item) => (
+                    <div key={item.id} className="flex justify-between items-center text-xs sm:text-sm">
+                      <span className="text-neutral-800">{item.cakeName} <span className="text-neutral-400">× {item.quantity}</span></span>
+                      <span className="font-semibold text-primary-900">Rp {(item.cakePrice * item.quantity).toLocaleString('id-ID')}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center pt-2.5 mt-2 border-t border-cream-200 font-bold text-sm sm:text-base">
+                    <span className="text-primary-900 font-display">Total Tagihan:</span>
+                    <span className="text-primary-800 font-sans">Rp {calculateTotal(order.orderItems).toLocaleString('id-ID')}</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Section detail pesanan dengan border top & bottom */}
-                <div className="border-t border-b py-3 sm:py-4 my-3 sm:my-4">
-                  <h4 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">Detail Pesanan:</h4>
-                  <div className="space-y-1.5 sm:space-y-2">
-                    {/* List semua item yang dipesan */}
-                    {order.orderItems.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center text-sm sm:text-base">
-                        <span className="flex-1">{item.cakeName} x {item.quantity}</span>
-                        <span className="font-semibold whitespace-nowrap ml-2">Rp {(item.cakePrice * item.quantity).toLocaleString('id-ID')}</span>
-                      </div>
-                    ))}
-                    {/* Total harga dengan border top */}
-                    <div className="flex justify-between items-center pt-2 border-t font-bold text-base sm:text-lg">
-                      <span>Total:</span>
-                      <span className="text-primary-600">Rp {calculateTotal(order.orderItems).toLocaleString('id-ID')}</span>
-                    </div>
-                  </div>
+              {/* Section bukti pembayaran dan tombol ubah status */}
+              <div className="pt-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-neutral-600">Bukti Transfer:</span>
+                  <button
+                    onClick={() => setSelectedImage(order.paymentProofUrl)}
+                    className="relative h-14 w-14 rounded-lg overflow-hidden border border-cream-300 hover:border-primary-500 transition group"
+                  >
+                    <Image
+                      src={order.paymentProofUrl}
+                      alt="Bukti Pembayaran"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform"
+                    />
+                  </button>
                 </div>
 
-                {/* Section bukti pembayaran dan tombol ubah status */}
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
-                  {/* Thumbnail bukti pembayaran, klik untuk perbesar */}
-                  <div className="w-full sm:w-auto">
-                    <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-2">Bukti Pembayaran:</p>
-                    <button
-                      onClick={() => setSelectedImage(order.paymentProofUrl)}
-                      className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-lg overflow-hidden border-2 border-gray-300 hover:border-primary-500 active:border-primary-600 transition"
-                    >
-                      <Image
-                        src={order.paymentProofUrl}
-                        alt="Bukti Pembayaran"
-                        fill
-                        className="object-cover"
-                      />
-                    </button>
-                  </div>
-
-                  {/* Tombol untuk mengubah status pesanan */}
-                  <div className="flex-1 w-full">
-                    <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-2">Ubah Status:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {/* Button Menunggu */}
-                      <button
-                        onClick={() => handleStatusChange(order.id, "menunggu")}
-                        disabled={order.status === "menunggu"}
-                        className="flex-1 min-w-[90px] px-3 sm:px-4 py-2 bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
-                      >
-                        Menunggu
-                      </button>
-                      {/* Button Diproses */}
-                      <button
-                        onClick={() => handleStatusChange(order.id, "diproses")}
-                        disabled={order.status === "diproses"}
-                        className="flex-1 min-w-[90px] px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
-                      >
-                        Diproses
-                      </button>
-                      {/* Button Selesai */}
-                      <button
-                        onClick={() => handleStatusChange(order.id, "selesai")}
-                        disabled={order.status === "selesai"}
-                        className="flex-1 min-w-[90px] px-3 sm:px-4 py-2 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
-                      >
-                        Selesai
-                      </button>
-                    </div>
-                  </div>
+                {/* Tombol status */}
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <span className="text-xs font-semibold text-neutral-500 hidden sm:inline">Ubah:</span>
+                  <button
+                    onClick={() => handleStatusChange(order.id, "menunggu")}
+                    disabled={order.status === "menunggu"}
+                    className="flex-1 sm:flex-none px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold rounded-lg border border-amber-200 transition disabled:opacity-40"
+                  >
+                    Menunggu
+                  </button>
+                  <button
+                    onClick={() => handleStatusChange(order.id, "diproses")}
+                    disabled={order.status === "diproses"}
+                    className="flex-1 sm:flex-none px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg border border-blue-200 transition disabled:opacity-40"
+                  >
+                    Diproses
+                  </button>
+                  <button
+                    onClick={() => handleStatusChange(order.id, "selesai")}
+                    disabled={order.status === "selesai"}
+                    className="flex-1 sm:flex-none px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-800 text-xs font-semibold rounded-lg border border-green-200 transition disabled:opacity-40"
+                  >
+                    Selesai
+                  </button>
                 </div>
               </div>
             </div>
@@ -225,22 +218,20 @@ export default function OrdersPage() {
       {/* Modal untuk preview gambar bukti pembayaran fullscreen */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-3 sm:p-4 z-50"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
           onClick={() => setSelectedImage(null)}
         >
-          <div className="relative max-w-4xl max-h-[90vh] w-full">
-            {/* Tombol close */}
+          <div className="relative max-w-2xl max-h-[90vh] w-full p-2 bg-white rounded-xl shadow-2xl">
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute -top-8 sm:-top-10 right-0 text-white text-2xl sm:text-3xl hover:text-gray-300"
+              className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-primary-800 text-cream-50 flex items-center justify-center text-sm font-bold shadow-md hover:bg-primary-900"
             >
-              ×
+              ✕
             </button>
-            {/* Gambar bukti pembayaran */}
             <img
               src={selectedImage}
               alt="Bukti Pembayaran"
-              className="max-w-full max-h-[90vh] object-contain rounded-lg"
+              className="max-w-full max-h-[80vh] mx-auto object-contain rounded-lg"
             />
           </div>
         </div>

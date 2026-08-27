@@ -45,198 +45,173 @@ export default async function DashboardPage() {
 
   // Return JSX - Tampilan UI dashboard
   return (
-    // Container dengan max width
-    <div className="max-w-7xl mx-auto">
-      {/* Welcome Header - Sambutan user */}
-      <div className="mb-6">
-        {/* Judul dengan nama user dari session */}
-        <h1 className="text-3xl font-display font-bold text-neutral-900 mb-1">
-          Selamat Datang, {session?.user.name}!
-        </h1>
-        {/* Subtitle */}
-        <p className="text-neutral-600">Berikut ringkasan bisnis Anda hari ini</p>
+    <div className="max-w-7xl mx-auto space-y-6">
+      {/* Welcome Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-cream-300">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-primary-900 tracking-tight">
+            Selamat Datang, {session?.user.name}!
+          </h1>
+          <p className="text-neutral-600 text-xs sm:text-sm mt-0.5">
+            Berikut ringkasan bisnis dan aktivitas toko kue Anda hari ini.
+          </p>
+        </div>
+        <div className="text-xs font-semibold uppercase tracking-wider text-accent-amber px-3 py-1.5 bg-cream-100 rounded-full border border-cream-300 w-fit">
+          Status: Toko Aktif
+        </div>
       </div>
 
-      {/* Statistics Cards - Grid cards menampilkan metrics penting */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Total Menu Kue */}
-        <div className="card-natural p-5">
-          {/* Header card dengan angka dan icon */}
-          <div className="flex justify-between items-start mb-3">
+        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+          <div className="flex justify-between items-start mb-2">
             <div>
-              {/* Label metric */}
-              <p className="text-neutral-500 text-sm font-medium">Total Menu</p>
-              {/* Angka metric - total kue */}
-              <h3 className="text-2xl font-bold mt-1 text-neutral-900">{totalCakes}</h3>
+              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Total Menu</p>
+              <h3 className="text-2xl font-display font-bold mt-1 text-primary-900">{totalCakes}</h3>
             </div>
-            {/* Icon dengan background warna */}
-            <div className="bg-blue-50 p-2 rounded-natural">
-              <span className="text-2xl">🍰</span>
+            <div className="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 font-display font-bold text-base border border-cream-200">
+              🍰
             </div>
           </div>
-          {/* Deskripsi metric */}
-          <p className="text-neutral-600 text-xs">Menu kue aktif</p>
+          <p className="text-neutral-500 text-[11px]">Varian kue aktif</p>
         </div>
 
         {/* Card 2: Total Pesanan */}
-        <div className="card-natural p-5">
-          <div className="flex justify-between items-start mb-3">
+        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+          <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="text-neutral-500 text-sm font-medium">Total Pesanan</p>
-              {/* Angka total semua pesanan */}
-              <h3 className="text-2xl font-bold mt-1 text-neutral-900">{totalOrders}</h3>
+              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Total Pesanan</p>
+              <h3 className="text-2xl font-display font-bold mt-1 text-primary-900">{totalOrders}</h3>
             </div>
-            <div className="bg-green-50 p-2 rounded-natural">
-              <span className="text-2xl">📦</span>
+            <div className="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 font-display font-bold text-base border border-cream-200">
+              📦
             </div>
           </div>
-          <p className="text-neutral-600 text-xs">Semua waktu</p>
+          <p className="text-neutral-500 text-[11px]">Semua transaksi</p>
         </div>
 
         {/* Card 3: Pesanan Menunggu (Pending) */}
-        <div className="card-natural p-5">
-          <div className="flex justify-between items-start mb-3">
+        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+          <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="text-neutral-500 text-sm font-medium">Menunggu</p>
-              {/* Angka pesanan yang masih pending */}
-              <h3 className="text-2xl font-bold mt-1 text-neutral-900">{pendingOrders}</h3>
+              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Perlu Konfirmasi</p>
+              <h3 className="text-2xl font-display font-bold mt-1 text-amber-800">{pendingOrders}</h3>
             </div>
-            <div className="bg-yellow-50 p-2 rounded-natural">
-              <span className="text-2xl">⏳</span>
+            <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-800 font-display font-bold text-base border border-amber-200">
+              ⏳
             </div>
           </div>
-          <p className="text-neutral-600 text-xs">Pesanan pending</p>
+          <p className="text-amber-800 text-[11px] font-medium">Status menunggu</p>
         </div>
 
-        {/* Card 4: Total Pendapatan (Revenue) */}
-        <div className="card-natural p-5">
-          <div className="flex justify-between items-start mb-3">
+        {/* Card 4: Total Pendapatan */}
+        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+          <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="text-neutral-500 text-sm font-medium">Pendapatan</p>
-              {/* Total revenue dengan format rupiah */}
-              <h3 className="text-xl font-bold mt-1 text-neutral-900">Rp {totalRevenue.toLocaleString('id-ID')}</h3>
+              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Pendapatan</p>
+              <h3 className="text-xl font-display font-bold mt-1 text-primary-800">
+                Rp {totalRevenue.toLocaleString('id-ID')}
+              </h3>
             </div>
-            <div className="bg-purple-50 p-2 rounded-natural">
-              <span className="text-2xl">💰</span>
+            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-800 font-display font-bold text-base border border-green-200">
+              💰
             </div>
           </div>
-          <p className="text-neutral-600 text-xs">Pesanan selesai</p>
+          <p className="text-neutral-500 text-[11px]">Pesanan selesai</p>
         </div>
       </div>
 
-      {/* Quick Actions - Shortcuts ke halaman penting */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {/* Action Card 1: Link ke Halaman Menu Kue */}
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link href="/dashboard/cakes">
-          {/* Card dengan hover effects */}
-          <div className="card-natural p-5 hover:shadow-md transition cursor-pointer border-2 border-transparent hover:border-primary-500">
-            {/* Header dengan icon dan judul */}
-            <div className="flex items-center mb-3">
-              {/* Icon dengan background */}
-              <div className="bg-primary-50 p-3 rounded-natural mr-3">
-                <span className="text-3xl">🍰</span>
+          <div className="bg-white p-5 rounded-xl border border-cream-300 hover:border-primary-500 hover:shadow-warm-md transition cursor-pointer group">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-cream-100 flex items-center justify-center text-lg">
+                🍰
               </div>
               <div>
-                {/* Judul action */}
-                <h2 className="text-lg font-display font-bold text-neutral-800">Menu Kue</h2>
-                {/* Subtitle */}
-                <p className="text-xs text-neutral-500">Kelola produk</p>
+                <h2 className="text-base font-display font-bold text-primary-900 group-hover:text-primary-700">
+                  Menu Kue
+                </h2>
+                <p className="text-[11px] text-neutral-500">Kelola dan update produk kue</p>
               </div>
             </div>
-            {/* Deskripsi action */}
-            <p className="text-neutral-600 text-sm">
-              Tambah, edit, dan hapus menu kue Anda
-            </p>
           </div>
         </Link>
 
-        {/* Action Card 2: Link ke Halaman Rekening */}
-        <Link href="/dashboard/payment">
-          <div className="card-natural p-5 hover:shadow-md transition cursor-pointer border-2 border-transparent hover:border-primary-500">
-            <div className="flex items-center mb-3">
-              <div className="bg-primary-50 p-3 rounded-natural mr-3">
-                <span className="text-3xl">💳</span>
-              </div>
-              <div>
-                <h2 className="text-lg font-display font-bold text-neutral-800">Rekening</h2>
-                <p className="text-xs text-neutral-500">Info pembayaran</p>
-              </div>
-            </div>
-            <p className="text-neutral-600 text-sm">
-              Kelola informasi rekening pembayaran
-            </p>
-          </div>
-        </Link>
-
-        {/* Action Card 3: Link ke Halaman Pesanan */}
         <Link href="/dashboard/orders">
-          <div className="card-natural p-5 hover:shadow-md transition cursor-pointer border-2 border-transparent hover:border-primary-500">
-            <div className="flex items-center mb-3">
-              <div className="bg-primary-50 p-3 rounded-natural mr-3">
-                <span className="text-3xl">📦</span>
+          <div className="bg-white p-5 rounded-xl border border-cream-300 hover:border-primary-500 hover:shadow-warm-md transition cursor-pointer group">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-cream-100 flex items-center justify-center text-lg">
+                📦
               </div>
               <div>
-                <h2 className="text-lg font-display font-bold text-neutral-800">Pesanan</h2>
-                <p className="text-xs text-neutral-500">Kelola order</p>
+                <h2 className="text-base font-display font-bold text-primary-900 group-hover:text-primary-700">
+                  Daftar Pesanan
+                </h2>
+                <p className="text-[11px] text-neutral-500">Pantau dan update status pesanan</p>
               </div>
             </div>
-            <p className="text-neutral-600 text-sm">
-              Lihat dan kelola pesanan pelanggan
-            </p>
+          </div>
+        </Link>
+
+        <Link href="/dashboard/payment">
+          <div className="bg-white p-5 rounded-xl border border-cream-300 hover:border-primary-500 hover:shadow-warm-md transition cursor-pointer group">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-cream-100 flex items-center justify-center text-lg">
+                💳
+              </div>
+              <div>
+                <h2 className="text-base font-display font-bold text-primary-900 group-hover:text-primary-700">
+                  Rekening Toko
+                </h2>
+                <p className="text-[11px] text-neutral-500">Kelola nomor rekening pembayaran</p>
+              </div>
+            </div>
           </div>
         </Link>
       </div>
 
-      {/* Recent Orders - Daftar pesanan terbaru */}
-      <div className="card-natural p-5">
-        {/* Header section dengan judul dan link */}
-        <div className="flex justify-between items-center mb-5">
-          {/* Judul section */}
-          <h2 className="text-xl font-display font-bold text-neutral-800">Pesanan Terbaru</h2>
-          {/* Link ke halaman orders lengkap */}
-          <Link href="/dashboard/orders" className="text-primary-600 hover:text-primary-700 font-medium text-sm">
+      {/* Recent Orders Table / Cards */}
+      <div className="bg-white rounded-xl border border-cream-300 shadow-warm-sm p-6">
+        <div className="flex justify-between items-center mb-5 pb-3 border-b border-cream-200">
+          <h2 className="text-lg font-display font-bold text-primary-900">
+            Pesanan Terbaru
+          </h2>
+          <Link href="/dashboard/orders" className="text-xs font-semibold text-primary-800 hover:text-accent-amber transition uppercase tracking-wider">
             Lihat Semua →
           </Link>
         </div>
         
-        {/* Conditional rendering: tampilkan empty state jika belum ada pesanan */}
         {recentOrders.length === 0 ? (
-          // Empty state
           <div className="text-center py-8 text-neutral-500">
-            <span className="text-4xl mb-2 block">📭</span>
-            <p className="text-sm">Belum ada pesanan masuk</p>
+            <p className="text-xs">Belum ada pesanan masuk.</p>
           </div>
         ) : (
-          // List pesanan - Loop semua recent orders
           <div className="space-y-3">
             {recentOrders.map((order: any) => (
-              // Card untuk setiap pesanan
-              <div key={order.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-natural hover:bg-neutral-100 transition border border-neutral-200">
-                {/* Info customer dan tanggal */}
+              <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-cream-50/50 rounded-lg border border-cream-200 gap-3">
                 <div className="flex-1">
-                  {/* Nama customer */}
-                  <h3 className="font-semibold text-neutral-800 text-sm">{order.customerName}</h3>
-                  {/* Jumlah item dan tanggal pesanan */}
-                  <p className="text-xs text-neutral-600">
+                  <h3 className="font-display font-semibold text-primary-900 text-sm">{order.customerName}</h3>
+                  <p className="text-xs text-neutral-500 mt-0.5">
                     {order.orderItems.length} item • {new Date(order.createdAt).toLocaleDateString('id-ID')}
                   </p>
                 </div>
-                {/* Total harga pesanan */}
-                <div className="text-right mr-4">
-                  <p className="font-bold text-neutral-800 text-sm">
-                    {/* Hitung total dari semua order items */}
+                <div className="sm:text-right">
+                  <p className="font-bold text-primary-900 text-sm font-sans">
                     Rp {order.orderItems.reduce((sum: number, item: any) => sum + (item.cakePrice * item.quantity), 0).toLocaleString('id-ID')}
                   </p>
                 </div>
-                {/* Badge status dengan warna conditional */}
-                <span className={`px-3 py-1 rounded-natural text-xs font-medium ${
-                  order.status === 'menunggu' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' : // Kuning untuk menunggu
-                  order.status === 'diproses' ? 'bg-blue-100 text-blue-800 border border-blue-200' :     // Biru untuk diproses
-                  'bg-green-100 text-green-800 border border-green-200'                                   // Hijau untuk selesai
-                }`}>
-                  {/* Capitalize first letter dari status */}
-                  {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                </span>
+                <div>
+                  <span className={`inline-block px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase ${
+                    order.status === 'menunggu' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                    order.status === 'diproses' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                    'bg-green-100 text-green-800 border border-green-200'
+                  }`}>
+                    {order.status}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

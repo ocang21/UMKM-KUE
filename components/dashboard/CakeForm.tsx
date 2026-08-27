@@ -106,27 +106,32 @@ export default function CakeForm({ cake, onClose }: CakeFormProps) {
   // Render modal form
   return (
     // Overlay modal dengan backdrop gelap
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-3 sm:p-4 z-50">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50 animate-in fade-in duration-200">
       {/* Container modal */}
-      <div className="bg-white rounded-lg sm:rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-warm-xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-cream-300">
         {/* Header modal dengan judul dan tombol close */}
-        <div className="sticky top-0 bg-white border-b px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
-          <h2 className="text-xl sm:text-2xl font-display font-bold text-gray-800">
-            {cake ? "Edit Kue" : "Tambah Kue Baru"}
-          </h2>
+        <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-cream-200 px-6 py-4 flex justify-between items-center z-10">
+          <div>
+            <h2 className="text-xl font-display font-bold text-primary-900">
+              {cake ? "Edit Data Kue" : "Tambah Menu Kue"}
+            </h2>
+            <p className="text-[11px] uppercase tracking-wider text-accent-amber font-semibold">
+              Katalog Toko
+            </p>
+          </div>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 active:text-gray-900 text-2xl sm:text-3xl"
+            className="w-8 h-8 rounded-full bg-cream-100 text-primary-800 hover:bg-cream-200 flex items-center justify-center text-sm font-bold transition"
           >
-            ×
+            ✕
           </button>
         </div>
 
         {/* Form content */}
-        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Input nama kue */}
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-700 mb-1.5">
               Nama Kue *
             </label>
             <input
@@ -134,14 +139,14 @@ export default function CakeForm({ cake, onClose }: CakeFormProps) {
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Contoh: Brownies Coklat"
+              className="w-full px-4 py-2.5 text-sm rounded-lg border border-cream-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-cream-50/50"
+              placeholder="Contoh: Brownies Fudge Coklat"
             />
           </div>
 
           {/* Input harga */}
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-700 mb-1.5">
               Harga (Rp) *
             </label>
             <input
@@ -149,65 +154,66 @@ export default function CakeForm({ cake, onClose }: CakeFormProps) {
               required
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Contoh: 50000"
+              className="w-full px-4 py-2.5 text-sm rounded-lg border border-cream-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition bg-cream-50/50"
+              placeholder="Contoh: 45000"
               min="0"
             />
           </div>
 
           {/* Input foto kue dengan preview */}
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-              Foto Kue {!cake && "*"}
+            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-700 mb-1.5">
+              Foto Produk {!cake && "*"}
             </label>
             <input
               type="file"
               accept="image/*"
               required={!cake}
               onChange={handleImageChange}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 text-xs rounded-lg border border-cream-300 focus:ring-2 focus:ring-primary-500 bg-cream-50/30 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-800 file:text-cream-50 hover:file:bg-primary-900 file:cursor-pointer"
             />
             {/* Preview gambar jika ada */}
             {imagePreview && (
-              <div className="mt-2 sm:mt-3">
+              <div className="mt-3 p-2 bg-cream-100 rounded-xl border border-cream-200">
+                <p className="text-[10px] uppercase font-semibold tracking-wider text-neutral-500 mb-1">Preview Foto:</p>
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="w-full h-40 sm:h-48 object-cover rounded-lg"
+                  className="w-full h-40 object-cover rounded-lg"
                 />
               </div>
             )}
           </div>
 
           {/* Checkbox untuk status ready/tidak ready */}
-          <div className="flex items-center">
+          <div className="flex items-center pt-1">
             <input
               type="checkbox"
               id="isAvailable"
               checked={formData.isAvailable}
               onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
-              className="w-4 h-4 sm:w-5 sm:h-5 text-primary-500 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-700 rounded border-cream-300 focus:ring-primary-500 accent-primary-700"
             />
-            <label htmlFor="isAvailable" className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-gray-700">
-              Kue tersedia / ready
+            <label htmlFor="isAvailable" className="ml-2.5 text-xs font-semibold text-neutral-800 cursor-pointer">
+              Menu siap dipesan / Ready stock
             </label>
           </div>
 
           {/* Tombol Batal dan Simpan */}
-          <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4">
+          <div className="flex gap-2.5 pt-4 border-t border-cream-200">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 active:bg-gray-100 transition text-sm sm:text-base"
+              className="flex-1 py-2.5 px-4 border border-cream-300 text-neutral-700 font-semibold rounded-full hover:bg-cream-100 transition text-xs uppercase tracking-wider"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white font-semibold rounded-lg transition disabled:opacity-50 text-sm sm:text-base"
+              className="flex-1 py-2.5 px-4 btn-primary transition disabled:opacity-50 text-xs uppercase tracking-wider"
             >
-              {isLoading ? "Menyimpan..." : "Simpan"}
+              {isLoading ? "Menyimpan..." : "Simpan Menu"}
             </button>
           </div>
         </form>
