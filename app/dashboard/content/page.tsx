@@ -84,12 +84,12 @@ export default function ContentManagementPage() {
         </button>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-cream-200 pb-2">
+      {/* Navigation Tabs (Horizontal Scrollable on Mobile) */}
+      <div className="flex overflow-x-auto pb-2 gap-2 border-b border-cream-200 no-scrollbar -mx-3.5 px-3.5 sm:mx-0 sm:px-0">
         <button
           type="button"
           onClick={() => setActiveTab("umum")}
-          className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition ${
+          className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition whitespace-nowrap flex-shrink-0 ${
             activeTab === "umum"
               ? "bg-primary-800 text-cream-50 shadow-warm-sm"
               : "bg-white text-neutral-700 border border-cream-300 hover:bg-cream-100"
@@ -100,7 +100,7 @@ export default function ContentManagementPage() {
         <button
           type="button"
           onClick={() => setActiveTab("hero")}
-          className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition ${
+          className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition whitespace-nowrap flex-shrink-0 ${
             activeTab === "hero"
               ? "bg-primary-800 text-cream-50 shadow-warm-sm"
               : "bg-white text-neutral-700 border border-cream-300 hover:bg-cream-100"
@@ -111,7 +111,7 @@ export default function ContentManagementPage() {
         <button
           type="button"
           onClick={() => setActiveTab("tentang")}
-          className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition ${
+          className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition whitespace-nowrap flex-shrink-0 ${
             activeTab === "tentang"
               ? "bg-primary-800 text-cream-50 shadow-warm-sm"
               : "bg-white text-neutral-700 border border-cream-300 hover:bg-cream-100"
@@ -122,7 +122,7 @@ export default function ContentManagementPage() {
         <button
           type="button"
           onClick={() => setActiveTab("keunggulan")}
-          className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition ${
+          className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition whitespace-nowrap flex-shrink-0 ${
             activeTab === "keunggulan"
               ? "bg-primary-800 text-cream-50 shadow-warm-sm"
               : "bg-white text-neutral-700 border border-cream-300 hover:bg-cream-100"

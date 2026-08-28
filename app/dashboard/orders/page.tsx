@@ -167,57 +167,63 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              {/* Section bukti pembayaran dan tombol ubah status */}
-              <div className="pt-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold text-neutral-600">Bukti Transfer:</span>
-                  <button
-                    onClick={() => setSelectedImage(order.paymentProofUrl)}
-                    className="relative h-14 w-14 rounded-lg overflow-hidden border border-cream-300 hover:border-primary-500 transition group"
-                  >
-                    <Image
-                      src={order.paymentProofUrl}
-                      alt="Bukti Pembayaran"
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform"
-                    />
-                  </button>
+              {/* Section bukti pembayaran dan tombol aksi */}
+              <div className="pt-4 flex flex-col gap-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xs font-semibold text-neutral-600">Bukti:</span>
+                    <button
+                      onClick={() => setSelectedImage(order.paymentProofUrl)}
+                      className="relative h-12 w-12 sm:h-14 sm:w-14 rounded-lg overflow-hidden border border-cream-300 hover:border-primary-500 transition group flex-shrink-0"
+                    >
+                      <Image
+                        src={order.paymentProofUrl}
+                        alt="Bukti Pembayaran"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform"
+                      />
+                    </button>
+                    <span className="text-[11px] text-neutral-400 hidden sm:inline">(Klik untuk perbesar)</span>
+                  </div>
+
                   <a
                     href={`https://wa.me/${order.whatsappNumber.replace(/^0/, '62')}?text=${encodeURIComponent(
                       `Halo Kak ${order.customerName}, kami dari Toko Kue UMKM ingin mengonfirmasi pesanan #${order.id.slice(-6).toUpperCase()} dengan status saat ini: [${order.status.toUpperCase()}]. Total: Rp ${calculateTotal(order.orderItems).toLocaleString('id-ID')}. Terima kasih!`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-semibold transition"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-semibold transition shadow-sm"
                   >
-                    <span>💬 Hubungi Pembeli</span>
+                    <span>💬 Hubungi WA</span>
                   </a>
                 </div>
 
-                {/* Tombol status */}
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <span className="text-xs font-semibold text-neutral-500 hidden sm:inline">Ubah:</span>
-                  <button
-                    onClick={() => handleStatusChange(order.id, "menunggu")}
-                    disabled={order.status === "menunggu"}
-                    className="flex-1 sm:flex-none px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold rounded-lg border border-amber-200 transition disabled:opacity-40"
-                  >
-                    Menunggu
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange(order.id, "diproses")}
-                    disabled={order.status === "diproses"}
-                    className="flex-1 sm:flex-none px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg border border-blue-200 transition disabled:opacity-40"
-                  >
-                    Diproses
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange(order.id, "selesai")}
-                    disabled={order.status === "selesai"}
-                    className="flex-1 sm:flex-none px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-800 text-xs font-semibold rounded-lg border border-green-200 transition disabled:opacity-40"
-                  >
-                    Selesai
-                  </button>
+                {/* Tombol ubah status (Grid 3 Kolom di HP) */}
+                <div className="pt-2 border-t border-cream-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <span className="text-xs font-semibold text-neutral-500">Update Status Pesanan:</span>
+                  <div className="grid grid-cols-3 gap-2 w-full sm:w-auto">
+                    <button
+                      onClick={() => handleStatusChange(order.id, "menunggu")}
+                      disabled={order.status === "menunggu"}
+                      className="px-2.5 py-2 sm:py-1.5 bg-amber-50 hover:bg-amber-100 active:bg-amber-200 text-amber-800 text-xs font-semibold rounded-lg border border-amber-200 transition disabled:opacity-40 text-center"
+                    >
+                      Menunggu
+                    </button>
+                    <button
+                      onClick={() => handleStatusChange(order.id, "diproses")}
+                      disabled={order.status === "diproses"}
+                      className="px-2.5 py-2 sm:py-1.5 bg-blue-50 hover:bg-blue-100 active:bg-blue-200 text-blue-800 text-xs font-semibold rounded-lg border border-blue-200 transition disabled:opacity-40 text-center"
+                    >
+                      Diproses
+                    </button>
+                    <button
+                      onClick={() => handleStatusChange(order.id, "selesai")}
+                      disabled={order.status === "selesai"}
+                      className="px-2.5 py-2 sm:py-1.5 bg-green-50 hover:bg-green-100 active:bg-green-200 text-green-800 text-xs font-semibold rounded-lg border border-green-200 transition disabled:opacity-40 text-center"
+                    >
+                      Selesai
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

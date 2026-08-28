@@ -274,7 +274,7 @@ export default function HomePage() {
         <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-primary-200/30 blur-3xl pointer-events-none"></div>
 
         {/* Floating CSS/SVG Artisan Pastry Cards (Automatic Continuous Floating Motion) */}
-        
+
         {/* Top-Left: Warm Coffee & Latte Art */}
         <div className="hidden lg:block absolute top-6 left-6 xl:left-12 z-10 animate-float-card-1 pointer-events-auto">
           <div className="w-40 h-40 xl:w-48 xl:h-48 rounded-2xl bg-white/95 backdrop-blur-md shadow-warm-lg border border-cream-300 p-3 hover:scale-105 transition-transform duration-300 flex flex-col items-center justify-center group cursor-default">

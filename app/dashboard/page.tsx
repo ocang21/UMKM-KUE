@@ -61,69 +61,69 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Statistics Cards (2 Columns in Mobile, 4 Columns in Desktop) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Card 1: Total Menu Kue */}
-        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+        <div className="bg-white p-3.5 sm:p-5 rounded-xl border border-cream-300 shadow-warm-sm flex flex-col justify-between">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Total Menu</p>
-              <h3 className="text-2xl font-display font-bold mt-1 text-primary-900">{totalCakes}</h3>
+              <p className="text-neutral-500 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Total Menu</p>
+              <h3 className="text-xl sm:text-2xl font-display font-bold mt-0.5 sm:mt-1 text-primary-900">{totalCakes}</h3>
             </div>
-            <div className="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 font-display font-bold text-base border border-cream-200">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 font-display font-bold text-sm sm:text-base border border-cream-200 flex-shrink-0">
               🍰
             </div>
           </div>
-          <p className="text-neutral-500 text-[11px]">Varian kue aktif</p>
+          <p className="text-neutral-500 text-[10px] sm:text-[11px]">Varian kue aktif</p>
         </div>
 
         {/* Card 2: Total Pesanan */}
-        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+        <div className="bg-white p-3.5 sm:p-5 rounded-xl border border-cream-300 shadow-warm-sm flex flex-col justify-between">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Total Pesanan</p>
-              <h3 className="text-2xl font-display font-bold mt-1 text-primary-900">{totalOrders}</h3>
+              <p className="text-neutral-500 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Total Pesanan</p>
+              <h3 className="text-xl sm:text-2xl font-display font-bold mt-0.5 sm:mt-1 text-primary-900">{totalOrders}</h3>
             </div>
-            <div className="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 font-display font-bold text-base border border-cream-200">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 font-display font-bold text-sm sm:text-base border border-cream-200 flex-shrink-0">
               📦
             </div>
           </div>
-          <p className="text-neutral-500 text-[11px]">Semua transaksi</p>
+          <p className="text-neutral-500 text-[10px] sm:text-[11px]">Semua transaksi</p>
         </div>
 
         {/* Card 3: Pesanan Menunggu (Pending) */}
-        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+        <div className="bg-white p-3.5 sm:p-5 rounded-xl border border-cream-300 shadow-warm-sm flex flex-col justify-between">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Perlu Konfirmasi</p>
-              <h3 className="text-2xl font-display font-bold mt-1 text-amber-800">{pendingOrders}</h3>
+              <p className="text-neutral-500 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Menunggu</p>
+              <h3 className="text-xl sm:text-2xl font-display font-bold mt-0.5 sm:mt-1 text-amber-800">{pendingOrders}</h3>
             </div>
-            <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-800 font-display font-bold text-base border border-amber-200">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-800 font-display font-bold text-sm sm:text-base border border-amber-200 flex-shrink-0">
               ⏳
             </div>
           </div>
-          <p className="text-amber-800 text-[11px] font-medium">Status menunggu</p>
+          <p className="text-amber-800 text-[10px] sm:text-[11px] font-medium">Perlu konfirmasi</p>
         </div>
 
         {/* Card 4: Total Pendapatan */}
-        <div className="bg-white p-5 rounded-xl border border-cream-300 shadow-warm-sm">
+        <div className="bg-white p-3.5 sm:p-5 rounded-xl border border-cream-300 shadow-warm-sm flex flex-col justify-between">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="text-neutral-500 text-xs uppercase tracking-wider font-semibold">Pendapatan</p>
-              <h3 className="text-xl font-display font-bold mt-1 text-primary-800">
+              <p className="text-neutral-500 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Pendapatan</p>
+              <h3 className="text-base sm:text-xl font-display font-bold mt-0.5 sm:mt-1 text-primary-800 truncate">
                 Rp {totalRevenue.toLocaleString('id-ID')}
               </h3>
             </div>
-            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-800 font-display font-bold text-base border border-green-200">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-50 flex items-center justify-center text-green-800 font-display font-bold text-sm sm:text-base border border-green-200 flex-shrink-0">
               💰
             </div>
           </div>
-          <p className="text-neutral-500 text-[11px]">Pesanan selesai</p>
+          <p className="text-neutral-500 text-[10px] sm:text-[11px]">Pesanan selesai</p>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Quick Actions (Grid 2 Kolom di Mobile, 4 di Desktop) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Link href="/dashboard/cakes">
           <div className="bg-white p-5 rounded-xl border border-cream-300 hover:border-primary-500 hover:shadow-warm-md transition cursor-pointer group">
             <div className="flex items-center gap-3">
