@@ -165,9 +165,9 @@ export default function KeunggulanPage() {
       </nav>
 
       {/* Main Content */}
-      <main className="container mx-auto max-w-6xl px-3.5 sm:px-6 py-6 sm:py-12 md:py-20 flex-1">
-        {/* Breadcrumb Kembali ke Beranda */}
-        <div className="mb-4">
+      <main className="container mx-auto max-w-5xl px-3.5 sm:px-6 py-4 sm:py-10 md:py-16 flex-1">
+        {/* Desktop Breadcrumb Only */}
+        <div className="hidden md:block mb-6">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-accent-amber hover:text-primary-800 transition"
@@ -176,26 +176,37 @@ export default function KeunggulanPage() {
             <span>Kembali ke Beranda</span>
           </Link>
         </div>
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-14">
-          <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold text-accent-amber block mb-1.5 sm:mb-2">
-            {settings.advantagesBadge}
-          </span>
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-primary-900 mb-2 sm:mb-4">
+
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
+          <div className="inline-flex items-center justify-center gap-1.5 mb-2 px-3 py-0.5 bg-amber-50 rounded-full border border-amber-200/60">
+            <span className="text-accent-amber text-xs">✨</span>
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-primary-900">
+              {settings.advantagesBadge}
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-primary-950 mb-2 tracking-tight">
             {settings.advantagesTitle}
           </h1>
-          <div className="w-12 sm:w-16 h-0.5 bg-accent-gold mx-auto mb-3"></div>
-          <p className="text-neutral-600 text-xs sm:text-base">
-            Komitmen kami untuk selalu memberikan yang terbaik bagi setiap pelanggan tercinta.
+          <div className="flex items-center justify-center gap-2 my-2.5 opacity-80">
+            <span className="w-8 sm:w-16 h-px bg-gradient-to-r from-transparent to-accent-gold"></span>
+            <span className="text-accent-gold text-xs">✦</span>
+            <span className="w-8 sm:w-16 h-px bg-gradient-to-l from-transparent to-accent-gold"></span>
+          </div>
+          <p className="text-neutral-600 text-xs sm:text-base max-w-md mx-auto leading-relaxed">
+            Komitmen kami untuk selalu memberikan kualitas terbaik di setiap gigitan kue Anda.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-8 mb-10 sm:mb-16">
-          <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_4px_20px_rgb(60,35,18,0.04)] p-4 sm:p-8 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 group">
-            <div className="w-11 h-11 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 text-sm sm:text-2xl font-display font-bold border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
+        {/* 3 Keunggulan Cards (Mobile: Sleek Minimalist Cards, Desktop: 3-Column Cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-12">
+          {/* Feature 1 */}
+          <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_2px_12px_rgba(60,35,18,0.04)] p-4 sm:p-7 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 group">
+            <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 font-display font-bold text-sm sm:text-lg border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
               01
             </div>
-            <div className="flex-1">
-              <h3 className="font-display font-bold text-sm sm:text-xl text-primary-900 mb-1 sm:mb-3 group-hover:text-primary-700 transition-colors">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-display font-bold text-sm sm:text-lg text-primary-900 mb-1 sm:mb-2 group-hover:text-primary-700 transition-colors">
                 {settings.feature1Title}
               </h3>
               <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
@@ -204,12 +215,13 @@ export default function KeunggulanPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_4px_20px_rgb(60,35,18,0.04)] p-4 sm:p-8 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 group">
-            <div className="w-11 h-11 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 text-sm sm:text-2xl font-display font-bold border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
+          {/* Feature 2 */}
+          <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_2px_12px_rgba(60,35,18,0.04)] p-4 sm:p-7 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 group">
+            <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 font-display font-bold text-sm sm:text-lg border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
               02
             </div>
-            <div className="flex-1">
-              <h3 className="font-display font-bold text-sm sm:text-xl text-primary-900 mb-1 sm:mb-3 group-hover:text-primary-700 transition-colors">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-display font-bold text-sm sm:text-lg text-primary-900 mb-1 sm:mb-2 group-hover:text-primary-700 transition-colors">
                 {settings.feature2Title}
               </h3>
               <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
@@ -218,12 +230,13 @@ export default function KeunggulanPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_4px_20px_rgb(60,35,18,0.04)] p-4 sm:p-8 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 group">
-            <div className="w-11 h-11 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 text-sm sm:text-2xl font-display font-bold border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
+          {/* Feature 3 */}
+          <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_2px_12px_rgba(60,35,18,0.04)] p-4 sm:p-7 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 group">
+            <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 font-display font-bold text-sm sm:text-lg border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
               03
             </div>
-            <div className="flex-1">
-              <h3 className="font-display font-bold text-sm sm:text-xl text-primary-900 mb-1 sm:mb-3 group-hover:text-primary-700 transition-colors">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-display font-bold text-sm sm:text-lg text-primary-900 mb-1 sm:mb-2 group-hover:text-primary-700 transition-colors">
                 {settings.feature3Title}
               </h3>
               <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
@@ -233,27 +246,40 @@ export default function KeunggulanPage() {
           </div>
         </div>
 
-        {/* Certificate / Quality Box */}
-        <div className="vintage-frame bg-cream-100 rounded-2xl p-5 sm:p-8 text-center max-w-3xl mx-auto">
-          <h3 className="font-display font-bold text-lg sm:text-2xl text-primary-900 mb-1.5 sm:mb-2">{settings.halalBoxTitle}</h3>
-          <p className="text-xs md:text-sm text-neutral-600 max-w-lg mx-auto mb-6">
+        {/* Certificate / Quality Box (Minimalis & Elegan) */}
+        <div className="relative rounded-3xl bg-white border border-amber-900/10 p-5 sm:p-8 text-center max-w-2xl mx-auto shadow-[0_4px_20px_rgba(60,35,18,0.04)]">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2.5 rounded-full bg-cream-100 text-primary-800 flex items-center justify-center text-lg sm:text-xl shadow-2xs border border-amber-200/60">
+            🛡️
+          </div>
+          <h3 className="font-display font-bold text-lg sm:text-2xl text-primary-950 mb-1.5">{settings.halalBoxTitle}</h3>
+          <p className="text-xs sm:text-sm text-neutral-600 max-w-md mx-auto mb-5 leading-relaxed">
             {settings.halalBoxDesc}
           </p>
-          <Link href="/menu" className="btn-primary text-xs uppercase tracking-wider py-3 px-8">
-            Lihat Menu Kami
+          <Link
+            href="/menu"
+            className="inline-flex items-center justify-center gap-2 btn-primary text-xs uppercase tracking-wider py-2.5 px-6 sm:px-8 shadow-warm-md hover:scale-105 active:scale-95 transition-all"
+          >
+            <span>Lihat Menu Kami</span>
+            <span className="text-sm">➔</span>
           </Link>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#1C120A] text-cream-200 py-10 px-4 border-t border-primary-900 mt-16">
-        <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
-          <p>© 2026 {settings.storeName}. Seluruh Hak Cipta Dilindungi.</p>
-          <div className="flex gap-6 text-cream-400">
-            <Link href="/" className="hover:text-accent-gold">Beranda</Link>
-            <Link href="/tentang" className="hover:text-accent-gold">Tentang Kami</Link>
-            <Link href="/menu" className="hover:text-accent-gold">Menu</Link>
-            <Link href="/kontak" className="hover:text-accent-gold">Kontak</Link>
+      <footer className="bg-[#140D06] text-cream-200 pt-8 pb-20 md:pb-10 px-3.5 sm:px-6 border-t border-amber-900/30 mt-10">
+        <div className="container mx-auto max-w-5xl">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-center sm:text-left">
+            <div>
+              <p className="font-display font-bold text-cream-50 text-sm">{settings.storeName}</p>
+              <p className="text-cream-400/60 text-[11px] mt-0.5">© 2026 Seluruh Hak Cipta Dilindungi.</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 text-[11px]">
+              <Link href="/" className="px-2.5 py-1 rounded-md bg-[#1E130A] border border-amber-900/40 text-cream-300 hover:text-accent-gold transition">Beranda</Link>
+              <Link href="/tentang" className="px-2.5 py-1 rounded-md bg-[#1E130A] border border-amber-900/40 text-cream-300 hover:text-accent-gold transition">Tentang Kami</Link>
+              <Link href="/menu" className="px-2.5 py-1 rounded-md bg-[#1E130A] border border-amber-900/40 text-cream-300 hover:text-accent-gold transition">Menu</Link>
+              <Link href="/kontak" className="px-2.5 py-1 rounded-md bg-[#1E130A] border border-amber-900/40 text-cream-300 hover:text-accent-gold transition">Kontak</Link>
+              <Link href="/order" className="px-2.5 py-1 rounded-md bg-amber-500/20 border border-accent-gold/40 text-accent-gold font-semibold hover:text-white transition">Pesan ➔</Link>
+            </div>
           </div>
         </div>
       </footer>

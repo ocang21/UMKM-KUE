@@ -624,48 +624,65 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section id="keunggulan" className="py-10 sm:py-16 md:py-24 px-4 bg-cream-50">
+      {/* Why Choose Us Section (Mobile: Minimalis, Ramping & Ramah Jempol | Desktop: 3 Kolom Elegan) */}
+      <section id="keunggulan" className="py-8 sm:py-16 md:py-24 px-3.5 sm:px-6 bg-cream-50 border-t border-cream-200">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-14">
-            <span className="text-[11px] sm:text-xs uppercase tracking-[0.2em] font-semibold text-accent-amber block mb-1.5">
+          {/* Section Header */}
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12 md:mb-14">
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-accent-amber block mb-1.5">
               {settings.advantagesBadge}
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-primary-900 mb-2 sm:mb-3">
+            <h2 className="text-xl sm:text-3xl md:text-4xl font-display font-bold text-primary-900 mb-2 sm:mb-3">
               {settings.advantagesTitle}
             </h2>
             <div className="w-10 sm:w-12 h-0.5 bg-accent-gold mx-auto"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            <div className="card-artisan p-5 sm:p-8 text-center bg-white">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3.5 sm:mb-5 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 text-lg sm:text-xl font-display font-bold border border-cream-300">
+          {/* Cards: Mobile = Horizontal Compact List (Hemat Ruang & Nyaman Dibaca), Desktop = 3-Column Card */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-6">
+            {/* Keunggulan 1 */}
+            <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_4px_16px_rgba(60,35,18,0.04)] p-3.5 sm:p-7 md:p-8 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 group">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 text-sm sm:text-xl font-display font-bold border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
                 01
               </div>
-              <h3 className="font-display font-bold text-base sm:text-lg text-primary-900 mb-1.5 sm:mb-2">{settings.feature1Title}</h3>
-              <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
-                {settings.feature1Desc}
-              </p>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-display font-bold text-sm sm:text-lg text-primary-900 mb-1 sm:mb-2 group-hover:text-primary-700 transition-colors">
+                  {settings.feature1Title}
+                </h3>
+                <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
+                  {settings.feature1Desc}
+                </p>
+              </div>
             </div>
 
-            <div className="card-artisan p-5 sm:p-8 text-center bg-white">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3.5 sm:mb-5 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 text-lg sm:text-xl font-display font-bold border border-cream-300">
+            {/* Keunggulan 2 */}
+            <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_4px_16px_rgba(60,35,18,0.04)] p-3.5 sm:p-7 md:p-8 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 group">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 text-sm sm:text-xl font-display font-bold border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
                 02
               </div>
-              <h3 className="font-display font-bold text-base sm:text-lg text-primary-900 mb-1.5 sm:mb-2">{settings.feature2Title}</h3>
-              <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
-                {settings.feature2Desc}
-              </p>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-display font-bold text-sm sm:text-lg text-primary-900 mb-1 sm:mb-2 group-hover:text-primary-700 transition-colors">
+                  {settings.feature2Title}
+                </h3>
+                <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
+                  {settings.feature2Desc}
+                </p>
+              </div>
             </div>
 
-            <div className="card-artisan p-5 sm:p-8 text-center bg-white">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3.5 sm:mb-5 rounded-full bg-cream-100 flex items-center justify-center text-primary-800 text-lg sm:text-xl font-display font-bold border border-cream-300">
+            {/* Keunggulan 3 */}
+            <div className="bg-white rounded-2xl border border-amber-900/10 shadow-[0_4px_16px_rgba(60,35,18,0.04)] p-3.5 sm:p-7 md:p-8 flex md:flex-col items-start md:items-center text-left md:text-center gap-3.5 sm:gap-4 hover:shadow-warm-md hover:border-accent-gold/40 transition-all duration-300 group">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cream-100 to-amber-50 flex items-center justify-center text-primary-800 text-sm sm:text-xl font-display font-bold border border-amber-200/60 shadow-2xs flex-shrink-0 group-hover:scale-105 transition-transform">
                 03
               </div>
-              <h3 className="font-display font-bold text-base sm:text-lg text-primary-900 mb-1.5 sm:mb-2">{settings.feature3Title}</h3>
-              <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
-                {settings.feature3Desc}
-              </p>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-display font-bold text-sm sm:text-lg text-primary-900 mb-1 sm:mb-2 group-hover:text-primary-700 transition-colors">
+                  {settings.feature3Title}
+                </h3>
+                <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
+                  {settings.feature3Desc}
+                </p>
+              </div>
             </div>
           </div>
         </div>

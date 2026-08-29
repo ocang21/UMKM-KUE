@@ -165,9 +165,9 @@ export default function KontakPage() {
       </nav>
 
       {/* Main Content */}
-      <main className="container mx-auto max-w-5xl px-3.5 sm:px-6 py-6 sm:py-12 md:py-20 flex-1">
-        {/* Breadcrumb Kembali ke Beranda */}
-        <div className="mb-4">
+      <main className="container mx-auto max-w-5xl px-3.5 sm:px-6 py-4 sm:py-10 md:py-16 flex-1">
+        {/* Desktop Breadcrumb Only */}
+        <div className="hidden md:block mb-6">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-accent-amber hover:text-primary-800 transition"
