@@ -115,33 +115,33 @@ export default function AIChatBubble() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-50 flex flex-col items-end">
       {/* Floating Chat Modal Box */}
       {isOpen && (
-        <div className="w-[92vw] sm:w-[380px] md:w-[410px] h-[540px] max-h-[80vh] bg-white rounded-2xl shadow-warm-xl border border-cream-300 flex flex-col overflow-hidden mb-3.5 animate-in slide-in-from-bottom-4 duration-300">
+        <div className="w-[calc(100vw-2rem)] sm:w-[380px] md:w-[410px] h-[480px] sm:h-[540px] max-h-[78vh] bg-white rounded-2xl shadow-warm-xl border border-cream-300 flex flex-col overflow-hidden mb-3 animate-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
-          <div className="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-900 text-cream-50 p-4 flex items-center justify-between border-b border-primary-700/50">
-            <div className="flex items-center gap-3">
+          <div className="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-900 text-cream-50 p-3 sm:p-4 flex items-center justify-between border-b border-primary-700/50">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-xl border-2 border-accent-gold shadow-sm">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cream-100 flex items-center justify-center text-lg sm:text-xl border-2 border-accent-gold shadow-sm">
                   🧁
                 </div>
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-primary-900 rounded-full"></span>
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-primary-900 rounded-full"></span>
               </div>
               <div>
-                <h3 className="font-display font-bold text-sm text-cream-50 flex items-center gap-1.5">
+                <h3 className="font-display font-bold text-xs sm:text-sm text-cream-50 flex items-center gap-1.5">
                   Chef Pastry AI
-                  <span className="text-[10px] bg-accent-gold text-primary-950 px-1.5 py-0.2 rounded font-sans font-bold uppercase">
+                  <span className="text-[9px] sm:text-[10px] bg-accent-gold text-primary-950 px-1.5 py-0.2 rounded font-sans font-bold uppercase">
                     AI
                   </span>
                 </h3>
-                <p className="text-[11px] text-cream-200/80">Asisten Rekomendasi Toko Kue</p>
+                <p className="text-[10px] sm:text-[11px] text-cream-200/80">Asisten Rekomendasi Toko Kue</p>
               </div>
             </div>
 
             <button
               onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-cream-100 flex items-center justify-center text-sm font-bold transition"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 hover:bg-white/20 text-cream-100 flex items-center justify-center text-xs sm:text-sm font-bold transition"
               aria-label="Tutup Chat"
             >
               ✕

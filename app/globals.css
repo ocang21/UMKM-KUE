@@ -63,11 +63,15 @@ body {
     @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-cream-100 text-primary-800 border border-cream-300;
   }
 
-  /* Double border frame vintage untuk hero/section highlight */
+  /* Double border frame vintage untuk hero/section highlight (rapi & minimalis di HP) */
   .vintage-frame {
-    @apply relative p-6 md:p-10 bg-white border border-primary-200 shadow-warm-lg;
-    outline: 1px solid rgba(200, 159, 110, 0.4);
-    outline-offset: -8px;
+    @apply relative p-5 sm:p-8 md:p-10 bg-white border border-cream-300 sm:border-primary-200 shadow-warm-md sm:shadow-warm-lg;
+  }
+  @media (min-width: 640px) {
+    .vintage-frame {
+      outline: 1px solid rgba(200, 159, 110, 0.4);
+      outline-offset: -8px;
+    }
   }
 }
 

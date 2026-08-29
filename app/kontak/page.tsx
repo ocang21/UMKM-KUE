@@ -176,23 +176,23 @@ export default function KontakPage() {
             <span>Kembali ke Beranda</span>
           </Link>
         </div>
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-xs uppercase tracking-[0.25em] font-semibold text-accent-amber block mb-2">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
+          <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold text-accent-amber block mb-1.5">
             Hubungi & Kunjungi
           </span>
-          <h1 className="text-3xl md:text-5xl font-display font-bold text-primary-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-primary-900 mb-2 sm:mb-3">
             Informasi Kontak
           </h1>
-          <div className="w-16 h-0.5 bg-accent-gold mx-auto mb-3"></div>
-          <p className="text-neutral-600 text-sm md:text-base">
+          <div className="w-12 sm:w-16 h-0.5 bg-accent-gold mx-auto mb-2.5 sm:mb-3"></div>
+          <p className="text-neutral-600 text-xs sm:text-sm md:text-base px-2">
             Punya pertanyaan mengenai pesanan khusus, acara besar, atau lokasi toko? Silakan hubungi kami.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-8">
           {/* Card WhatsApp & Email */}
-          <div className="bg-white rounded-2xl border border-cream-300 shadow-warm-sm p-8 space-y-6">
-            <h3 className="font-display font-bold text-2xl text-primary-900 border-b border-cream-200 pb-3">
+          <div className="bg-white rounded-2xl border border-cream-300 shadow-warm-sm p-5 sm:p-8 space-y-4 sm:space-y-6">
+            <h3 className="font-display font-bold text-lg sm:text-2xl text-primary-900 border-b border-cream-200 pb-2.5 sm:pb-3">
               Layanan Pelanggan
             </h3>
 

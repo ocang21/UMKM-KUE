@@ -205,17 +205,34 @@ export default function MenuPage() {
             <span>Kembali ke Beranda</span>
           </Link>
         </div>
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-14">
-          <span className="text-xs uppercase tracking-[0.25em] font-semibold text-accent-amber block mb-2">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10">
+          <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold text-accent-amber block mb-1.5">
             Katalog Lengkap
           </span>
-          <h1 className="text-3xl md:text-5xl font-display font-bold text-primary-900 mb-3 sm:mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-primary-900 mb-2 sm:mb-3">
             Daftar Menu Kue
           </h1>
-          <div className="w-16 h-0.5 bg-accent-gold mx-auto mb-3"></div>
-          <p className="text-neutral-600 text-xs sm:text-base">
+          <div className="w-12 sm:w-16 h-0.5 bg-accent-gold mx-auto mb-2.5"></div>
+          <p className="text-neutral-600 text-xs sm:text-sm md:text-base px-2">
             Pilih kue kesukaan Anda dan pesan langsung secara online untuk santap hangat bersama keluarga.
           </p>
+        </div>
+
+        {/* Category Filter Pills (Disembunyikan di HP, hanya tampil di Desktop) */}
+        <div className="hidden sm:flex justify-center gap-2 mb-6 sm:mb-10">
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setSelectedCategory(category.id)}
+              className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
+                selectedCategory === category.id
+                  ? "bg-primary-800 text-cream-50 shadow-warm-sm"
+                  : "bg-white text-neutral-700 border border-cream-300 hover:border-primary-500"
+              }`}
+            >
+              {category.name}
+            </button>
+          ))}
         </div>
 
         {isLoading ? (
@@ -223,7 +240,7 @@ export default function MenuPage() {
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-2 border-primary-700 border-t-transparent"></div>
             <p className="mt-4 text-neutral-600 text-sm">Memuat menu kue...</p>
           </div>
-        ) : cakes.length === 0 ? (
+        ) : filteredCakes.length === 0 ? (
           <div className="text-center py-16 card-artisan max-w-md mx-auto p-8">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-cream-100 flex items-center justify-center text-primary-700 font-display text-2xl font-bold border border-cream-300">
               🧁
@@ -235,7 +252,7 @@ export default function MenuPage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
-            {cakes.map((cake) => (
+            {filteredCakes.map((cake) => (
               <div
                 key={cake.id}
                 className="group bg-white rounded-xl border border-cream-200 overflow-hidden shadow-warm-sm hover:shadow-warm-md transition-all duration-300 flex flex-col justify-between"

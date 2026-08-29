@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { saveDataUrl } from "@/lib/uploads";
 
+export const dynamic = "force-dynamic";
+
 // GET handler (PUBLIC): Mengambil semua kue yang ready/tersedia untuk customer
 export async function GET() {
   try {

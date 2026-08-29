@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 // Import Prisma client untuk database
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 // GET handler (PUBLIC): Mengambil 1 rekening pembayaran terbaru untuk customer
 export async function GET() {
   try {
